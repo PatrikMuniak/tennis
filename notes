@@ -1,0 +1,391 @@
+{
+    "TimeZone": "Europe/London",
+    "EarliestStartTime": 420,
+    "LatestEndTime": 1320,
+    "MinimumInterval": 60,
+    "HideResourceProperties": false,
+    "Resources": [
+        {
+            "ID": "a2e95c77-3a0e-48e3-8f52-e34f9bdfd3b1",
+            "Name": "Court 1",
+            "Number": 0,
+            "Location": 0,
+            "Lighting": 1,
+            "Surface": 7,
+            "Size": 0,
+            "Category": 0,
+            "Days": [
+                {
+                    "Date": "2024-06-10T00:00:00",
+                    "Sessions": [
+                        {
+                            "ID": "ccd7e70e-18c1-4d43-bc14-ec45c399f095",
+                            "Category": 0,
+                            "SubCategory": 0,
+                            "Name": "6",
+                            "StartTime": 420,
+                            "EndTime": 540,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 1,
+                            "Recurrence": false,
+                            "Cost": 6.0,
+                            "CostFrom": 6.0,
+                            "CourtCost": 6.0,
+                            "LightingCost": 0.0,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "1378f5d5-2e37-4686-94fa-a0e85045286b",
+                            "Category": 2000,
+                            "SubCategory": 2010,
+                            "Name": "Adult Beginners (NTA)",
+                            "Colour": "#e1e2ff",
+                            "StartTime": 540,
+                            "EndTime": 600,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": true,
+                            "CostFrom": 0.0,
+                            "CourtCost": 0.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "89681118-e254-432d-8f4f-d387094ed271",
+                            "Category": 2000,
+                            "SubCategory": 2010,
+                            "Name": "Adult Intermediate (NTA)",
+                            "Colour": "#e1e2ff",
+                            "StartTime": 600,
+                            "EndTime": 660,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": true,
+                            "CostFrom": 0.0,
+                            "CourtCost": 0.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "ccd7e70e-18c1-4d43-bc14-ec45c399f095",
+                            "Category": 0,
+                            "SubCategory": 0,
+                            "Name": "6",
+                            "StartTime": 660,
+                            "EndTime": 1020,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 1,
+                            "Recurrence": false,
+                            "Cost": 6.0,
+                            "CostFrom": 6.0,
+                            "CourtCost": 6.0,
+                            "LightingCost": 0.0,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "9744d669-98cb-4ab6-b32a-ca75e80b5091",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 1020,
+                            "EndTime": 1140,
+                            "Interval": 120,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 2.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "47fbcd37-f421-4f38-9c5f-af0b892d87bc",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 1140,
+                            "EndTime": 1200,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 1.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "f178f249-9608-4f7d-a0be-7d4e508c0c4c",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 1200,
+                            "EndTime": 1320,
+                            "Interval": 120,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 2.00,
+                            "LightingCost": 3.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ID": "a59d912e-e66d-4ad0-ab38-ffb6c43f50ba",
+            "Name": "Court 2",
+            "Number": 1,
+            "Location": 0,
+            "Lighting": 1,
+            "Surface": 7,
+            "Size": 0,
+            "Category": 0,
+            "Days": [
+                {
+                    "Date": "2024-06-10T00:00:00",
+                    "Sessions": [
+                        {
+                            "ID": "ccd7e70e-18c1-4d43-bc14-ec45c399f095",
+                            "Category": 0,
+                            "SubCategory": 0,
+                            "Name": "6",
+                            "StartTime": 420,
+                            "EndTime": 540,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 1,
+                            "Recurrence": false,
+                            "Cost": 6.0,
+                            "CostFrom": 6.0,
+                            "CourtCost": 6.0,
+                            "LightingCost": 0.0,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "1378f5d5-2e37-4686-94fa-a0e85045286b",
+                            "Category": 2000,
+                            "SubCategory": 2010,
+                            "Name": "Adult Beginners (NTA)",
+                            "Colour": "#e1e2ff",
+                            "StartTime": 540,
+                            "EndTime": 600,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": true,
+                            "CostFrom": 0.0,
+                            "CourtCost": 0.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "89681118-e254-432d-8f4f-d387094ed271",
+                            "Category": 2000,
+                            "SubCategory": 2010,
+                            "Name": "Adult Intermediate (NTA)",
+                            "Colour": "#e1e2ff",
+                            "StartTime": 600,
+                            "EndTime": 660,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": true,
+                            "CostFrom": 0.0,
+                            "CourtCost": 0.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "ccd7e70e-18c1-4d43-bc14-ec45c399f095",
+                            "Category": 0,
+                            "SubCategory": 0,
+                            "Name": "6",
+                            "StartTime": 660,
+                            "EndTime": 780,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 1,
+                            "Recurrence": false,
+                            "Cost": 6.0,
+                            "CostFrom": 6.0,
+                            "CourtCost": 6.0,
+                            "LightingCost": 0.0,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "bb39ce2c-cd2f-4067-8ecf-a3a1e2822e27",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 780,
+                            "EndTime": 840,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 1.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "ccd7e70e-18c1-4d43-bc14-ec45c399f095",
+                            "Category": 0,
+                            "SubCategory": 0,
+                            "Name": "6",
+                            "StartTime": 840,
+                            "EndTime": 1020,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 1,
+                            "Recurrence": false,
+                            "Cost": 6.0,
+                            "CostFrom": 6.0,
+                            "CourtCost": 6.0,
+                            "LightingCost": 0.0,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "884c8618-2ace-4d0b-89c1-cf9b0f9bfab2",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 1020,
+                            "EndTime": 1080,
+                            "Interval": 60,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 1.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "2baf1ee5-990a-4251-80c7-03ce59b5bb9e",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 1080,
+                            "EndTime": 1200,
+                            "Interval": 120,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 2.00,
+                            "LightingCost": 0.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        },
+                        {
+                            "ID": "836f5a1d-596c-4c76-a560-229048c730dd",
+                            "Category": 1000,
+                            "SubCategory": 0,
+                            "Name": "Booking",
+                            "Colour": "#fcfabd",
+                            "StartTime": 1200,
+                            "EndTime": 1320,
+                            "Interval": 120,
+                            "IsCompletedEarly": false,
+                            "MaxSinglesSlots": 0,
+                            "MaxDoublesSlots": 0,
+                            "Capacity": 0,
+                            "Recurrence": false,
+                            "CostFrom": 0.0,
+                            "CourtCost": 2.00,
+                            "LightingCost": 3.00,
+                            "MemberPrice": 0.0,
+                            "GuestPrice": 0.0
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+
+today is 31 
+I can't book for 11th 
+people can only book 10 days in advance
+
+curl 'https://lyle.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate=2024-06-10&endDate=2024-06-10&roleId=&_=1717152154207' \
+
+curl 'https://stratford.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate=2024-06-10&endDate=2024-06-10' \
+
+
+Poplar Recreation Ground Tennis Courts
+St John's Park Tennis Courts
+Lyle Park Tennis Courts
+Central Park Tennis Courts
+Tennis Courts West Ham Park
+Stratford Park Tennis Courts - Newham Parks Tennis
+
+
+at th moment the response shows 
+general:
+    court1:
+        days:
+            sessions:
+
+I need just the free sessions 
+
+court_location, date, court_name, start_time, end_time, desc 
