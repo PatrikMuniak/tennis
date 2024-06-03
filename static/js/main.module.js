@@ -31,11 +31,12 @@ const endInput = document.getElementById('tbl-src-end')
 function filterTable() {
     const venueName = venueNameInput.value
     const res = venue_sess.filter((row) => {
-        if (venueName.length) {
-            row['venue_name'].startsWith(venueName)
+        if (venueName.length>0) {
+            return row['venue_name'].startsWith(venueName)
         } else {
             return true
         }
+        return false
     })
     var Table = document.getElementById('ven-sess');
     Table.innerHTML = "";

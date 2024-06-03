@@ -22,18 +22,20 @@ scheduler.start()
 # def job1():
 #     print('Job 1 executed')
 
-# @scheduler.task('interval', id='retrieve_venue_sessions', seconds=2, misfire_grace_time=900)
+# @scheduler.task('interval', id='retrieve_venue_sessions', seconds=30, misfire_grace_time=900)
 # def retrieve_venue_sessions():
+
 #     start_date =  datetime.datetime.today().strftime('%Y-%m-%d')
-#     end_date = datetime.datetime.today()+datetime.timedelta(days=10)
-#     venue_name = "lyle"
-#     venue_sessions = requests.get(f'https://{venue_name}.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}').content
-#     print(venue_sessions)
-#     con = sqlite3.connect("ltcb.db")
-#     cur = con.cursor()
-#     cur.execute('''INSERT INTO requests (venue, content) VALUES (?, ?)''', (venue_name, venue_sessions) )
-#     con.commit()
-#     print('Job 2 executed')
+#     end_date = (datetime.datetime.today()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')
+#     venue_names = ["lyle", "canning","royalvictoria", "stratford"]
+#     for venue_name in venue_names:
+#         venue_sessions = requests.get(f'https://{venue_name}.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}').content
+#         print(venue_sessions)
+#         con = sqlite3.connect("ltcb.db")
+#         cur = con.cursor()
+#         cur.execute('''INSERT INTO requests (venue, content) VALUES (?, ?)''', (venue_name, venue_sessions) )
+#         con.commit()
+#         print(f'Finished fetching data for {venue_name} start: {start_date} end: {end_date}')
 
 
 def get_venue_sessions(venue_name):
@@ -91,7 +93,7 @@ def get_venue_session():
     
     print("making request")
     venue_names = ["lyle", "canning","royalvictoria", "stratford"]
-    venue_names = venue_names[:1]
+    # venue_names = venue_names[:1]
     data = []
 
     for venue_name in venue_names:
