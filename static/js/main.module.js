@@ -16,9 +16,17 @@ var tBodyRef = document.getElementById('ven-sess');
 for (var i = 0; i < venue_sess.length; i++) {
     const session = venue_sess[i]
     var r = tBodyRef.insertRow();
-    for (val of Object.values(session)) {
+    for (var [key, value] of Object.entries(session)) {
         var c = r.insertCell();
-        var content = document.createTextNode(val)
+        if (key == "date") {
+            var dt = new Date(value * 1000)
+            const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+            var value = dayNames[dt.getDay()]+", "+dt.getDate()+"/"+dt.getMonth()+"/"+dt.getFullYear()
+        } else if (key == "start" || key == "end") {
+            var ts = new Date(value * 1000*60)
+            var value = ts.getHours()+":"+(ts.getMinutes() < 10 ? '0' : '') + ts.getMinutes()
+        }
+        var content = document.createTextNode(value)
         c.appendChild(content);
     }
 }
@@ -30,6 +38,7 @@ const endInput = document.getElementById('tbl-src-end')
 
 function filterTable() {
     const venueName = venueNameInput.value
+    const date = dateInput.value
     const res = venue_sess.filter((row) => {
         if (venueName.length>0) {
             return row['venue_name'].startsWith(venueName)
@@ -44,9 +53,17 @@ function filterTable() {
     for (var i = 0; i < res.length; i++) {
         const session = res[i]
         var r = tBodyRef.insertRow();
-        for (val of Object.values(session)) {
+        for (var [key, value] of Object.entries(session)) {
             var c = r.insertCell();
-            var content = document.createTextNode(val)
+            if (key == "date") {
+                var dt = new Date(value * 1000)
+                const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+                var value = dayNames[dt.getDay()]+", "+dt.getDate()+"/"+dt.getMonth()+"/"+dt.getFullYear()
+            } else if (key == "start" || key == "end") {
+                var ts = new Date(value * 1000*60)
+                var value = ts.getHours()+":"+(ts.getMinutes() < 10 ? '0' : '') + ts.getMinutes()
+            }
+            var content = document.createTextNode(value)
             c.appendChild(content);
         }
     }
