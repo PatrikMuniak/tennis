@@ -5,7 +5,7 @@ import requests
 import datetime
 import sqlite3
 import json
-
+import time
 
 app = Flask(__name__)
 
@@ -50,7 +50,7 @@ def get_venue_sessions(venue_name):
     for court in venue_sessions.get("Resources"):
         court_name = court.get("Name")
         for day in court.get("Days"):
-            date = datetime.datetime.strptime(day.get("Date"), "%Y-%m-%dT%H:%M:%S").strftime("%A, %d/%m/%Y")
+            date = time.mktime(datetime.datetime.strptime(day.get("Date"), "%Y-%m-%dT%H:%M:%S").timetuple())
             for session in day.get("Sessions"):
                 name = session.get("Name")
                 start = session.get("StartTime")
@@ -66,12 +66,12 @@ def get_venue_sessions(venue_name):
                                 "date":date,
                                 "court_name":court_name,
                                 "name":name,
-                                "start":datetime.datetime.fromtimestamp(start_sess*60).strftime('%H:%M'),
-                                "end":datetime.datetime.fromtimestamp(end_sess*60).strftime('%H:%M')})
+                                "start":start_sess,
+                                "end":end_sess})
                     else:
                         sessions.append({"venue_name":venue_name,"date":date,"court_name":court_name,"name":name,
-                                         "start":datetime.datetime.fromtimestamp(start*60).strftime('%H:%M'),
-                                         "end":datetime.datetime.fromtimestamp(end*60).strftime('%H:%M')})
+                                         "start":start,
+                                         "end":end})
         return sessions
     
 
