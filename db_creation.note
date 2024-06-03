@@ -1,0 +1,9 @@
+sqlite3 ltcb.db
+
+
+CREATE TABLE requests (
+    dt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    venue VARCHAR(40),
+    content TEXT
+);
+
