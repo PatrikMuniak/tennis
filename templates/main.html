@@ -6,35 +6,37 @@
 {% endblock %}
 
 {% block content %}
-<table class="table ">
-  <thead>
-    <tr>
-      <th>Venue Name</th>
-      <th>Date</th>
-      <th>Court Name</th>
-      <th>Booking Description</th>
-      <th>Start Time</th>
-      <th>End TIme</th>
-    </tr>
-    <tr>
-      <td><input class="form-control form-control-sm" type="text" id="tbl-src-vn-nm"></td>
-      <td><input class="form-control form-control-sm" type="date" id="tbl-src-dt"></td>
-      <td></td>
-      <td></td>
-          <td><select class="form-select form-select-sm" id="tbl-src-strt" name="hour">
-            <option value="">-</option>
-            {% for i in range(7, 24) %}
-            <option value="{{ i }}">{{ i }}:00</option>
-            {% endfor %}
-          </select></td>
-          <td></td>
-        </tr>
-      </thead>
-      
-      
-      <tbody id="ven-sess">
-      </tbody>
-    </table>
+<div class="container">
+  <table class="table table-striped table-bordered table-hover table-sm table-responsive">
+    <thead>
+      <tr>
+        <th scope="col">Venue Name</th>
+        <th scope="col">Date</th>
+        <th scope="col">Court Name</th>
+        <th scope="col">Booking Description</th>
+        <th scope="col">Time Slot</th>
+      </tr>
+      <tr>
+          <th scope="col"><input class="form-control form-control-sm" type="text" id="tbl-src-vn-nm"></th>
+          <th scope="col"><input class="form-control form-control-sm" type="date" id="tbl-src-dt"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col">
+              <select class="form-select form-select-sm" id="tbl-src-strt" name="hour">
+              <option value="">-</option>
+              {% for i in range(7, 24) %}
+              <option value="{{ i }}">{{ i }}:00</option>
+              {% endfor %}
+              </select>
+          </th>
+      </tr>
+        </thead>
+        
+        
+        <tbody id="ven-sess">
+        </tbody>
+      </table>
+</div>
     {% endblock %}
     
     {% block js %}
