@@ -17,12 +17,17 @@
       <th>End TIme</th>
     </tr>
     <tr>
-      <td><input type="text" id="tbl-src-vn-nm"></td>
-      <td><input type="date" id="tbl-src-dt"></td>
+      <td><input class="form-control form-control-sm" type="text" id="tbl-src-vn-nm"></td>
+      <td><input class="form-control form-control-sm" type="date" id="tbl-src-dt"></td>
       <td></td>
       <td></td>
-          <td><input type="time" id="tbl-src-strt"></td>
-          <td><input type="time" id="tbl-src-end"></td>
+          <td><select class="form-select form-select-sm" id="tbl-src-strt" name="hour">
+            <option value="">-</option>
+            {% for i in range(7, 24) %}
+            <option value="{{ i }}">{{ i }}:00</option>
+            {% endfor %}
+          </select></td>
+          <td></td>
         </tr>
       </thead>
       
