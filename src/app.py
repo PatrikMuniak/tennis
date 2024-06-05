@@ -10,6 +10,7 @@ import os
 
 app = Flask(__name__)
 DB_PATH = os.path.join(os.path.abspath('..'),"data","tcbl.db")
+
 class Config:
     SCHEDULER_API_ENABLED = True
 
@@ -32,7 +33,6 @@ def retrieve_venue_sessions():
     for venue_name in venue_names:
         print(f"Fetching sessions for {venue_name}")
         venue_sessions = requests.get(f'https://{venue_name}.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}').content
-        # print(venue_sessions)
         con = sqlite3.connect(DB_PATH)
         cur = con.cursor()
         cur.execute('''INSERT INTO requests (venue, content) VALUES (?, ?)''', (venue_name, venue_sessions) )
@@ -46,9 +46,11 @@ def get_venue_sessions(venue_name):
     cur = con.cursor()
     cur.execute('''select * from requests where venue=? order by rowid desc limit 1;''', (venue_name,) )
     query_out = cur.fetchone()
+
     venue_sessions = json.loads(query_out[2])
     venue_name = query_out[1]
     sessions = []
+
     for court in venue_sessions.get("Resources"):
         court_name = court.get("Name")
         for day in court.get("Days"):
@@ -74,7 +76,7 @@ def get_venue_sessions(venue_name):
                         sessions.append({"venue_name":venue_name,"date":date,"court_name":court_name,"name":name,
                                          "start":start,
                                          "end":end})
-        return sessions
+    return sessions
     
 
 @app.route("/")
