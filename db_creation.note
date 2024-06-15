@@ -1,4 +1,4 @@
-sqlite3 ltcb.db
+sqlite3 tcbl.db
 
 
 CREATE TABLE requests (
@@ -6,4 +6,5 @@ CREATE TABLE requests (
     venue VARCHAR(40),
     content TEXT
 );
-
+ALTER TABLE requests ADD COLUMN venue_name VARCHAR(40);
+ALTER TABLE requests RENAME COLUMN venue TO venue_id;

@@ -369,7 +369,7 @@ people can only book 10 days in advance
 
 curl 'https://lyle.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate=2024-06-10&endDate=2024-06-10&roleId=&_=1717152154207' \
 
-curl 'https://stratford.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate=2024-06-10&endDate=2024-06-10' \
+curl 'https://stratford.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate=2024-06-15&endDate=2024-06-20' \
 
 
 Poplar Recreation Ground Tennis Courts
@@ -402,3 +402,7 @@ sudo systemctl enable nginx && sudo systemctl start nginx
 scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/lcb/src ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/ltcb
 
 scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/lcb/requirements.txt ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/ltcb/requirements.txt
+
+
+
+you can book week view but at that point the ui specifies the resource id because it shows a single court
