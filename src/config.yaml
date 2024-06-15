@@ -1,0 +1,34 @@
+venue_list:
+  - venue_name: Lyle
+    venue_id: lyle
+    url: https://lyle.newhamparkstennis.org.uk/v0/VenueBooking/lyle_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}&_={ts}
+    params: 
+      resourceID:
+      startDate: 
+      endDate:
+      _: 
+  - venue_name: Stratford
+    venue_id: stratford
+    url: https://stratford.newhamparkstennis.org.uk/v0/VenueBooking/stratford_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}&_={ts}
+    params: 
+      resourceID:
+      startDate: 
+      endDate:
+      _: int(time.time()*1000)
+
+  - venue_name: Royal Victoria
+    venue_id: royalvictoria
+    url: https://royalvictoria.newhamparkstennis.org.uk/v0/VenueBooking/royalvictoria_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}&_={ts}
+    params: 
+      resourceID:
+      startDate: 
+      endDate:
+      _: int(time.time()*1000)
+  - venue_name: Canning
+    venue_id: canning
+    url: https://canning.newhamparkstennis.org.uk/v0/VenueBooking/canning_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}&_={ts}
+    params: 
+      resourceID:
+      startDate: 
+      endDate:
+      _: int(time.time()*1000)

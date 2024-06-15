@@ -13,21 +13,37 @@
         <th scope="col">Venue Name</th>
         <th scope="col">Date</th>
         <th scope="col">Court Name</th>
-        <th scope="col">Booking Description</th>
         <th scope="col">Time Slot</th>
       </tr>
       <tr>
           <th scope="col"><input class="form-control form-control-sm" type="text" id="tbl-src-vn-nm"></th>
           <th scope="col"><input class="form-control form-control-sm" type="date" id="tbl-src-dt"></th>
           <th scope="col"></th>
-          <th scope="col"></th>
           <th scope="col">
-              <select class="form-select form-select-sm" id="tbl-src-strt" name="hour">
-              <option value="">-</option>
-              {% for i in range(7, 24) %}
-              <option value="{{ i }}">{{ i }}:00</option>
-              {% endfor %}
-              </select>
+
+            <div class="row">
+              <div class="col">
+                <select class="form-select form-select-sm" id="tbl-src-strt" name="hour">
+                  <option value="">from</option>
+                  {% for i in range(7, 24) %}
+                  <option value="{{ i }}">{{ i }}:00</option>
+                  {% endfor %}
+                  </select>
+              </div>
+              <div class="col">
+                <select class="form-select form-select-sm" id="tbl-src-strt-bfr" name="hour">
+                  <option value="">to</option>
+                  {% for i in range(7, 24) %}
+                  <option value="{{ i }}">{{ i }}:00</option>
+                  {% endfor %}
+                  </select>
+              </div>
+            </div>
+
+              
+              
+              
+
           </th>
       </tr>
         </thead>

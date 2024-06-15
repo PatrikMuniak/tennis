@@ -1,13 +1,20 @@
 
 
-var req = new XMLHttpRequest();
-const url = new URL("/GetVenueSessions", location.origin)
-
-req.open("GET", url, false);
-req.send(null);
-const venue_sess = JSON.parse(req.responseText);
-
+const venues = ["lyle", "stratford", "royalvictoria", "canning"]
 var tBodyRef = document.getElementById('ven-sess');
+var venue_sess = []
+
+
+for (var i=0; i< venues.length; i++){
+    var req = new XMLHttpRequest();
+    var url = new URL("/GetVenueSessions?venueId="+venues[i], location.origin)
+    
+    req.open("GET", url, false);
+    req.send(null);
+    console.log(venue_sess.length)
+    venue_sess = venue_sess.concat(JSON.parse(req.responseText));
+
+}
 
 
 function getDateString(value){
@@ -26,10 +33,11 @@ function getTimeString(startTime, endTime){
 }
 
 function renderTable(rows){
+    console.log(rows.length)
     for (var i = 0; i < rows.length; i++) {
         const row = rows[i]
         var r = tBodyRef.insertRow();
-        var values = [row["venue_name"], getDateString(row["date"]),row["court_name"], row["name"], getTimeString(row["start"], row["end"])]
+        var values = [row["venue_name"], getDateString(row["date"]),row["court_name"], getTimeString(row["start"], row["end"])]
         for (var j = 0; j<values.length; j++) {
             var c = r.insertCell();
             c.appendChild(document.createTextNode(values[j]));
@@ -38,10 +46,10 @@ function renderTable(rows){
 }
 
 
-
 renderTable(venue_sess)
 
 const startInput = document.getElementById('tbl-src-strt');
+const startInputBefore = document.getElementById('tbl-src-strt-bfr');
 const venueNameInput = document.getElementById('tbl-src-vn-nm')
 const dateInput = document.getElementById('tbl-src-dt')
 
@@ -76,17 +84,30 @@ function filterAfterTime(rowTime, inputTime){
 
 }
 
+function filterBeforeTime(rowTime, inputTime){
+    
+    if (inputTime.length>0) {
+        const inpt = Number(inputTime)*60
+        return rowTime<inpt
+    } else {
+        return true
+    }
+
+}
+
 
 function filterTable() {
     const inputVenue = venueNameInput.value
     const inputDate = dateInput.value
     const inputStartTime = startInput.value
+    const inputStartTimeBefore = startInputBefore.value
 
     const res = venue_sess.filter((row) => {
         const isDate = filterDate(row['date'], inputDate)
         const isVenue = filterVenue(row['venue_name'], inputVenue)
         const afterTime = filterAfterTime(row['start'], inputStartTime)
-        const condition = [isDate, isVenue, afterTime]
+        const beforeTime = filterBeforeTime(row['start'], inputStartTimeBefore)
+        const condition = [isDate, isVenue, afterTime, beforeTime]
         return condition.every(v => v===true)
         
     })
@@ -96,5 +117,6 @@ function filterTable() {
     renderTable(res)
 }
 startInput.addEventListener("input", filterTable);
+startInputBefore.addEventListener("input", filterTable);
 dateInput.addEventListener("input", filterTable);
 venueNameInput.addEventListener("input", filterTable);
