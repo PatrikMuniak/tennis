@@ -1,3 +1,5 @@
 TO DO LIST
 - marshall config 
 - make http requests js async
+- don't need to request all the 14 days every time, sometimes the days don't have anything
+ left so no point updating 
