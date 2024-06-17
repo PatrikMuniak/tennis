@@ -1,17 +1,26 @@
 
+    
+var tBodyRef = document.getElementById('ven-sess');
 
-const venues = ["lyle", "stratford", "royalvictoria", "canning"]
+
+var favs = sessionStorage.getItem("favouriteVenues") 
+if (favs ==  null){
+    favs = JSON.stringify(["lyle", "stratford", "royalvictoria", "canning"])
+    sessionStorage.setItem("favouriteVenues", favs)
+}
+// validation for session storage
+favs = JSON.parse(sessionStorage.getItem("favouriteVenues"))
+
 var tBodyRef = document.getElementById('ven-sess');
 var venue_sess = []
 
 
-for (var i=0; i< venues.length; i++){
+for (var i=0; i< favs.length; i++){
     var req = new XMLHttpRequest();
-    var url = new URL("/GetVenueSessions?venueId="+venues[i], location.origin)
+    var url = new URL("/GetVenueSessions?venueId="+favs[i], location.origin)
     
     req.open("GET", url, false);
     req.send(null);
-    console.log(venue_sess.length)
     venue_sess = venue_sess.concat(JSON.parse(req.responseText));
 
 }
@@ -33,7 +42,6 @@ function getTimeString(startTime, endTime){
 }
 
 function renderTable(rows){
-    console.log(rows.length)
     for (var i = 0; i < rows.length; i++) {
         const row = rows[i]
         var r = tBodyRef.insertRow();
