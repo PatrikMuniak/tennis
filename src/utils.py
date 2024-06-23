@@ -3,6 +3,7 @@ import json
 import sqlite3
 import datetime
 import time
+from config import venues_cfg
 
 def get_venue_sessions(venue_id):
     con = sqlite3.connect(DB_PATH)
@@ -41,3 +42,7 @@ def get_venue_sessions(venue_id):
                                          "start":start,
                                          "end":end})
     return sessions
+
+def get_venues_list():
+
+    return venues_cfg.retrieve_params("venue_name", "venue_id")
