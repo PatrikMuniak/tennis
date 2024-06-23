@@ -5,6 +5,7 @@ import datetime
 import time
 from config import venues_cfg
 
+
 def get_venue_sessions(venue_id):
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
@@ -24,7 +25,9 @@ def get_venue_sessions(venue_id):
                 name = session.get("Name")
                 start = session.get("StartTime")
                 end = session.get("EndTime")
+                booking_url = venues_cfg.get_by_id(venue_id, "booking_url")["booking_url"].format(date=datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d'))
                 if name == "6"or name=="10":
+                    print()
                     if end - start > 60:
                         for i in range(((end-start)//60)):
                             start_sess = start +60*i
@@ -36,11 +39,13 @@ def get_venue_sessions(venue_id):
                                 "court_name":court_name,
                                 "name":name,
                                 "start":start_sess,
-                                "end":end_sess})
+                                "end":end_sess,
+                                "booking_url":booking_url})
                     else:
                         sessions.append({"venue_name":venue_name,"date":date,"court_name":court_name,"name":name,
                                          "start":start,
-                                         "end":end})
+                                         "end":end,
+                                         "booking_url":booking_url})
     return sessions
 
 def get_venues_list():

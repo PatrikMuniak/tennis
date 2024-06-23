@@ -7,6 +7,7 @@ venue_list:
       startDate: 
       endDate:
       _: 
+    booking_url: https://lyle.newhamparkstennis.org.uk/Booking/BookByDate#?date={date}&role=guest
   - venue_name: Stratford Park Tennis Courts
     venue_id: stratford
     url: https://stratford.newhamparkstennis.org.uk/v0/VenueBooking/stratford_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}&_={ts}
@@ -15,6 +16,7 @@ venue_list:
       startDate: 
       endDate:
       _: int(time.time()*1000)
+    booking_url: https://stratford.newhamparkstennis.org.uk/Booking/BookByDate#?date={date}&role=guest
 
   - venue_name: Royal Victoria Gardens Tennis Courts
     venue_id: royalvictoria
@@ -24,6 +26,8 @@ venue_list:
       startDate: 
       endDate:
       _: int(time.time()*1000)
+    booking_url: https://royalvictoria.newhamparkstennis.org.uk/Booking/BookByDate#?date={date}&role=guest
+
   - venue_name: Canning Town Recreation Ground Tennis Courts
     venue_id: canning
     url: https://canning.newhamparkstennis.org.uk/v0/VenueBooking/canning_newhamparkstennis_org_uk/GetVenueSessions?resourceID=&startDate={start_date}&endDate={end_date}&_={ts}
@@ -32,3 +36,4 @@ venue_list:
       startDate: 
       endDate:
       _: int(time.time()*1000)
+    booking_url: https://canning.newhamparkstennis.org.uk/Booking/BookByDate#?date={date}&role=guest

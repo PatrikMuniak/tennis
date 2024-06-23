@@ -70,12 +70,14 @@ var venue_sess = []
 
 
 for (var i=0; i< favs.length; i++){
-    var req = new XMLHttpRequest();
-    var url = new URL("/GetVenueSessions?venueId="+favs[i]["venue_id"], location.origin)
-    
-    req.open("GET", url, false);
-    req.send(null);
-    venue_sess = venue_sess.concat(JSON.parse(req.responseText));
+    if (favs[i]["enabled"]){
+        var req = new XMLHttpRequest();
+        var url = new URL("/GetVenueSessions?venueId="+favs[i]["venue_id"], location.origin)
+        
+        req.open("GET", url, false);
+        req.send(null);
+        venue_sess = venue_sess.concat(JSON.parse(req.responseText));
+    }
 
 }
 
@@ -104,9 +106,32 @@ function renderTable(rows){
             var c = r.insertCell();
             c.appendChild(document.createTextNode(values[j]));
         }
+        var c = r.insertCell();
+        var a = document.createElement('a');
+        a.innerText = "Book"
+        a.title = "Book"
+        a.href = row["booking_url"]
+        a.target = "_blank"
+        // var frm = document.createElement("FORM")
+        // frm.action = 
+        // var btn = document.createElement("INPUT")
+        // btn.type = "submit"
+        // btn.target = "_blank"
+        // btn.name = "Book"
+        // btn.value = "Book"
+        // btn.addEventListener("click",openBooking)
+        // frm.appendChild(btn)
+        c.appendChild(a)
     }
 }
+{/* <form action="https://google.com">
+    <input type="submit" value="Go to Google" />
+</form> */}
 
+function openBooking(){
+    url = "https://www.google.com"
+    window.open(url, "_blank");
+}
 
 renderTable(venue_sess)
 

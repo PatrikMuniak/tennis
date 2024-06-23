@@ -48,6 +48,7 @@ function renderTable(rows){
         checkbox.setAttribute("type", "checkbox");
         checkbox.setAttribute("id", "slct-"+i);
         checkbox.checked = isChecked
+        checkbox.addEventListener("change", selectVenue)
         var values = [row["venue_name"]]
         for (var j = 0; j<values.length; j++) {
             var c = r.insertCell();
@@ -59,22 +60,17 @@ function renderTable(rows){
 }
 renderTable(venues)
 function selectVenue(e){
-    const itemId = e.originalEvent.target
+    const itemId = e.originalEvent!=undefined ? e.originalEvent.target : e.target
     const intId = itemId.id.split("-")[1]
     console.log(intId)
-    var checkbox = document.getElementById("slct-"+intId);
-    checkbox.checked = !checkbox.checked 
     var favs = JSON.parse(localStorage.getItem("favouriteVenues"))
     let venue = favs.find(o => o.venue_id === venues[intId].venue_id);
+
+    var checkbox = document.getElementById("slct-"+intId);
+    checkbox.checked = !venue.enabled
     venue.enabled = checkbox.checked
     localStorage.setItem("favouriteVenues", JSON.stringify(favs))
     console.log(venue)
 
-    // var checkbox = document.getElementById("slct-"+)
-    // if (imagePath=="static/css/location-pin.svg"){
-    //     e.originalEvent.target.src = "static/css/location-pin-selected.svg"   
-    // } else{
-    //     e.originalEvent.target.src = "static/css/location-pin.svg"
-    // }
 
 }
