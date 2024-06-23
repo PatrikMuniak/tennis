@@ -1,15 +1,69 @@
 
     
-var tBodyRef = document.getElementById('ven-sess');
+function renderPreferences(favs){
+    var prefDiv = document.getElementById('preferences');
+    for (var i=0; i<favs.length;i++){
+        var input_element = document.createElement('input');
+        input_element.type = "checkbox"
+        input_element.value = favs[i]["venue_id"]
+        input_element.id = "ven-"+i
+        input_element.checked = favs[i]["enabled"]
+        var label_element = document.createElement('label');
+        label_element.for = input_element.id 
+        label_element.innerText = favs[i]["venue_name"]
+        prefDiv.appendChild(input_element)
+        prefDiv.appendChild(label_element)
+        input_element.addEventListener("change", updateSS);
+    }
 
+}
+// if unselected just hide the rows but on next reload don't load the 
+function updateSS(e){
+    var favs = JSON.parse(localStorage.getItem("favouriteVenues"))
+    for (var i=0; i<favs.length; i++){
+        if (favs[i]["venue_id"]==e.target.value){
+            favs[i]["enabled"] = e.target.checked
+        }
+    }
 
-var favs = sessionStorage.getItem("favouriteVenues") 
-if (favs ==  null){
-    favs = JSON.stringify(["lyle", "stratford", "royalvictoria", "canning"])
-    sessionStorage.setItem("favouriteVenues", favs)
+}
+
+console.log(preferences)
+function isFavsValid(){
+    try {
+        favs = JSON.parse(localStorage.getItem("favouriteVenues"))
+    } catch (e){
+        return false;
+    }
+    if ( favs == null && favs == undefined){
+        return false
+    }
+    return true
+}
+
+console.log(isFavsValid())
+if (! isFavsValid()){
+    // take what you have and check if there are keys that are not there
+    // var favs = JSON.parse(localStorasessionStoragege.getItem("favouriteVenues"))
+    var req = new XMLHttpRequest();
+    var url = new URL("/venues", location.origin)
+    
+    req.open("GET", url, false);
+    req.send(null);
+    venues_available = JSON.parse(req.responseText);
+    for (var i=0; i<venues_available.length; i++){
+        venues_available[i]["enabled"] = false
+    }
+    favs = JSON.stringify(venues_available)
+    
+    localStorage.setItem("favouriteVenues", favs)
+} else {
+    // compare both
 }
 // validation for session storage
-favs = JSON.parse(sessionStorage.getItem("favouriteVenues"))
+favs = JSON.parse(localStorage.getItem("favouriteVenues"))
+console.log(favs)
+renderPreferences(favs)
 
 var tBodyRef = document.getElementById('ven-sess');
 var venue_sess = []
@@ -17,7 +71,7 @@ var venue_sess = []
 
 for (var i=0; i< favs.length; i++){
     var req = new XMLHttpRequest();
-    var url = new URL("/GetVenueSessions?venueId="+favs[i], location.origin)
+    var url = new URL("/GetVenueSessions?venueId="+favs[i]["venue_id"], location.origin)
     
     req.open("GET", url, false);
     req.send(null);
