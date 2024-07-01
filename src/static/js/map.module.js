@@ -14,12 +14,18 @@ var MarkerIcon = L.icon({
     iconAnchor: [18, 35],
     tooltipAnchor: [13, -23],
 });
-var venues = [
-    {venue_name:"Lyle Park Tennis Courts", venue_id:"lyle", latlng:[51.50191898205893, 0.024873357726036438]},
-    {venue_name:"Stratford Park Tennis Courts", venue_id:"stratford", latlng:[51.53769599855995, 0.007150123322716152]},
-    {venue_name:"Canning Town Recreation Ground Tennis Courts", venue_id:"canning", latlng:[51.51657938280687, 0.028048209830891513]},
-    {venue_name:"Royal Victoria Park Tennis Courts", venue_id:"royalvictoria", latlng:[51.49978638111729, 0.06646199108841633]},
-];
+var venues = [];
+function retrieveMarkerData(){
+    var req = new XMLHttpRequest();
+        var url = new URL("/markerData", location.origin)
+        
+        req.open("GET", url, false);
+        req.send(null);
+        return JSON.parse(req.responseText);
+}
+
+venues = retrieveMarkerData()
+var favs = JSON.parse(localStorage.getItem("favouriteVenues"))
 
 for (var i=0; i<venues.length; i++){
     let  marker = L.marker(venues[i].latlng, {icon: MarkerIcon})
@@ -28,12 +34,15 @@ for (var i=0; i<venues.length; i++){
     .openTooltip()
     .on("click", selectVenue);
     const markerId = "mrkr-"+i
+    
     marker.getElement().setAttribute("id",markerId)
+    const enabled = favs.find(o => o.venue_id === venues[i]["venue_id"]).enabled
+    if (enabled){
+        marker.getElement().classList.add("marker-select")
+    }
 
 }
-console.log(venues)
 
-favs = JSON.parse(localStorage.getItem("favouriteVenues"))
 
 var tBodyRef = document.getElementById('ven-select');
 function renderTable(rows){
@@ -41,8 +50,8 @@ function renderTable(rows){
         const row = rows[i]
         var r = tBodyRef.insertRow();
         const fav = favs.find(o => o.venue_id === row["venue_id"])
-        console.log(fav)
-        console.log(fav.enabled)
+
+
         const isChecked = favs.find(o => o.venue_id === row["venue_id"]).enabled
         var checkbox = document.createElement("INPUT")
         checkbox.setAttribute("type", "checkbox");
@@ -59,10 +68,11 @@ function renderTable(rows){
     }
 }
 renderTable(venues)
+
 function selectVenue(e){
     const itemId = e.originalEvent!=undefined ? e.originalEvent.target : e.target
     const intId = itemId.id.split("-")[1]
-    console.log(intId)
+
     var favs = JSON.parse(localStorage.getItem("favouriteVenues"))
     let venue = favs.find(o => o.venue_id === venues[intId].venue_id);
 
@@ -70,7 +80,15 @@ function selectVenue(e){
     checkbox.checked = !venue.enabled
     venue.enabled = checkbox.checked
     localStorage.setItem("favouriteVenues", JSON.stringify(favs))
-    console.log(venue)
+
+
+    var marker = document.getElementById("mrkr-"+intId);
+    if (venue.enabled) {
+
+        marker.classList.add("marker-select");
+    } else {
+        marker.classList.remove("marker-select");
+    }
 
 
 }

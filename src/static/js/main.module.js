@@ -1,34 +1,19 @@
 
     
 function renderPreferences(favs){
-    var prefDiv = document.getElementById('preferences');
+    var select = document.getElementById('tbl-src-vn-nm');
     for (var i=0; i<favs.length;i++){
-        var input_element = document.createElement('input');
-        input_element.type = "checkbox"
-        input_element.value = favs[i]["venue_id"]
-        input_element.id = "ven-"+i
-        input_element.checked = favs[i]["enabled"]
-        var label_element = document.createElement('label');
-        label_element.for = input_element.id 
-        label_element.innerText = favs[i]["venue_name"]
-        prefDiv.appendChild(input_element)
-        prefDiv.appendChild(label_element)
-        input_element.addEventListener("change", updateSS);
-    }
-
-}
-// if unselected just hide the rows but on next reload don't load the 
-function updateSS(e){
-    var favs = JSON.parse(localStorage.getItem("favouriteVenues"))
-    for (var i=0; i<favs.length; i++){
-        if (favs[i]["venue_id"]==e.target.value){
-            favs[i]["enabled"] = e.target.checked
+        if (favs[i].enabled){
+            var opt = document.createElement('option');
+            opt.value = favs[i].venue_id;
+            opt.innerHTML = favs[i].venue_name;
+            select.appendChild(opt);
         }
     }
 
 }
 
-console.log(preferences)
+
 function isFavsValid(){
     try {
         favs = JSON.parse(localStorage.getItem("favouriteVenues"))
@@ -41,10 +26,9 @@ function isFavsValid(){
     return true
 }
 
-console.log(isFavsValid())
 if (! isFavsValid()){
     // take what you have and check if there are keys that are not there
-    // var favs = JSON.parse(localStorasessionStoragege.getItem("favouriteVenues"))
+
     var req = new XMLHttpRequest();
     var url = new URL("/venues", location.origin)
     
@@ -52,7 +36,7 @@ if (! isFavsValid()){
     req.send(null);
     venues_available = JSON.parse(req.responseText);
     for (var i=0; i<venues_available.length; i++){
-        venues_available[i]["enabled"] = false
+        venues_available[i]["enabled"] = true
     }
     favs = JSON.stringify(venues_available)
     
@@ -62,7 +46,6 @@ if (! isFavsValid()){
 }
 // validation for session storage
 favs = JSON.parse(localStorage.getItem("favouriteVenues"))
-console.log(favs)
 renderPreferences(favs)
 
 var tBodyRef = document.getElementById('ven-sess');
@@ -108,30 +91,17 @@ function renderTable(rows){
         }
         var c = r.insertCell();
         var a = document.createElement('a');
-        a.innerText = "Book"
+        a.innerHTML = "Book&nbsp;"
         a.title = "Book"
         a.href = row["booking_url"]
         a.target = "_blank"
-        // var frm = document.createElement("FORM")
-        // frm.action = 
-        // var btn = document.createElement("INPUT")
-        // btn.type = "submit"
-        // btn.target = "_blank"
-        // btn.name = "Book"
-        // btn.value = "Book"
-        // btn.addEventListener("click",openBooking)
-        // frm.appendChild(btn)
+        a.classList.add("link-body-emphasis", "link-offset-2", "link-underline-opacity-25", "link-underline-opacity-75-hover")
+
         c.appendChild(a)
     }
 }
-{/* <form action="https://google.com">
-    <input type="submit" value="Go to Google" />
-</form> */}
 
-function openBooking(){
-    url = "https://www.google.com"
-    window.open(url, "_blank");
-}
+
 
 renderTable(venue_sess)
 
@@ -153,7 +123,7 @@ function filterDate(date, targetDate){
 
 function filterVenue(rowVal, inputVal){
     if (inputVal.length>0) {
-        return rowVal.startsWith(inputVal)
+        return rowVal == inputVal
     } else {
         return true
     }
@@ -191,7 +161,7 @@ function filterTable() {
 
     const res = venue_sess.filter((row) => {
         const isDate = filterDate(row['date'], inputDate)
-        const isVenue = filterVenue(row['venue_name'], inputVenue)
+        const isVenue = filterVenue(row['venue_id'], inputVenue)
         const afterTime = filterAfterTime(row['start'], inputStartTime)
         const beforeTime = filterBeforeTime(row['start'], inputStartTimeBefore)
         const condition = [isDate, isVenue, afterTime, beforeTime]
