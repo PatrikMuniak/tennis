@@ -16,3 +16,7 @@
 }
 
 #map { height: 500px; }
+
+.marker-select {
+    filter: hue-rotate(120deg);
+}
