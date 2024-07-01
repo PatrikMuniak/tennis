@@ -1,0 +1,22 @@
+.leaflet-tooltip{
+    background-color: transparent;
+    border-color:transparent;
+    box-shadow: none;
+    color:blue;
+    font-weight: 900;
+    padding:0;
+    margin:0;
+    width: 150px;
+    white-space: break-spaces;
+    text-align: right;
+}
+.leaflet-tooltip::before{
+    content: none;
+
+}
+
+#map { height: 500px; }
+
+.marker-select {
+    filter: hue-rotate(120deg);
+}
