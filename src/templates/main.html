@@ -7,6 +7,9 @@
 {% block content %}
 <div class="container">
   <h1>{% block title %}Tennis Court Booking London{% endblock %}</h1>
+  <div id="preferences">
+  </div>
+  
   <table class="table table-striped table-bordered table-hover table-sm table-responsive">
     <thead>
       <tr>
@@ -14,9 +17,14 @@
         <th scope="col">Date</th>
         <th scope="col">Court Name</th>
         <th scope="col">Time Slot</th>
+        <th scope="col"></th>
       </tr>
       <tr>
-          <th scope="col"><input class="form-control form-control-sm" type="text" id="tbl-src-vn-nm"></th>
+          <th scope="col">
+            <select class="form-select form-select-sm" id="tbl-src-vn-nm" name="venue-name">
+              <option value="">Venue</option>
+            </select>
+              <!-- <input class="form-control form-control-sm" type="text" id="tbl-src-vn-nm"></th> -->
           <th scope="col"><input class="form-control form-control-sm" type="date" id="tbl-src-dt"></th>
           <th scope="col"></th>
           <th scope="col">
@@ -39,12 +47,8 @@
                   </select>
               </div>
             </div>
-
-              
-              
-              
-
           </th>
+          <th scope="col"></th>
       </tr>
         </thead>
         
