@@ -9,9 +9,14 @@ ssh -i ~/.ssh/ubuntu-dell.pem ec2-user@ec2-52-209-185-155.eu-west-1.compute.amaz
 sudo yum install nginx
 sudo systemctl enable nginx && sudo systemctl start nginx
 
+<<<<<<< Updated upstream
 scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/lcb/src ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/ltcb
 
 scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/lcb/requirements.txt ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/ltcb/requirements.txt
+=======
+scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/tcbl/src ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/tcbl/src
+scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/tcbl/requirements.txt ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/ltcb/requirements.txt
+>>>>>>> Stashed changes
 
 
 /usr/bin/python3.11 -m venv venv

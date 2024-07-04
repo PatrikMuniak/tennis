@@ -406,3 +406,13 @@ scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/lcb/requirements.txt ec2-user@ec2-52-209
 
 
 you can book week view but at that point the ui specifies the resource id because it shows a single court
+
+// var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
+// 	minZoom: 0,
+// 	maxZoom: 20,
+// 	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+// 	ext: 'png'
+// })
+
+
+scp -i ~/.ssh/ubuntu-dell.pem  ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/tcbl/data/tcbl.db ~/code/tcbl/tcbl.db

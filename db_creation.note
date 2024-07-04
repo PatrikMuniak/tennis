@@ -8,3 +8,5 @@ CREATE TABLE requests (
 );
 ALTER TABLE requests ADD COLUMN venue_name VARCHAR(40);
 ALTER TABLE requests RENAME COLUMN venue TO venue_id;
+
+ALTER TABLE requests DROP COLUMN venue_name;
