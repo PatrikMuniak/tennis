@@ -1,9 +1,21 @@
 import yaml
+from const import 
 
 venue_config=None
 
-# every request is a for loop, it can be optimized
+class Venue(yaml.YAMLObject):
+    def __init__(self, venue_name, venue_id, url, booking_url, latlng):
+        self.venue_name = venue_name
+        self.venue_id = venue_id
+        self.url = url
+        self.booking_url = booking_url
+        self.latlng = latlng
+    def __repr__(self):
+         return "%s(venue_name=%r venue_id=%r url=%r booking_url=%r latlng=%r)" % (
+             self.__class__.__name__, self.venue_name, self.venue_id, self.url, self.booking_url, self.latlng)
 
+# every request is a for loop, it can be optimized
+# if a parameter is missing there should be an error 
 class Venue_Config:
     def __init__(self, path) -> None:
         self.path = path
@@ -23,7 +35,6 @@ class Venue_Config:
 
             out.append(row)
 
-            
         return out
 
     def get_by_id(self, key, *args):
