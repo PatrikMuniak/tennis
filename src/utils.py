@@ -1,4 +1,4 @@
-from const import DB_PATH
+from const import DB_PATH, VENUE_NAME
 import json
 import sqlite3
 import datetime
@@ -6,6 +6,7 @@ import time
 from config import venues_cfg
 from models import request as rq
 import logging
+
 
 def time_it(func):
     def wrapper(*args, **kwargs):
@@ -28,15 +29,15 @@ def inflate_booking_url(url_template, date):
     return inflated_url
 
 def generate_booking_url(venue_id, date): 
-    query_out = venues_cfg.get_by_id(venue_id, "booking_url")
-    url_template = query_out.get("booking_url")
+    url_template = venues_cfg.venue_list.get_by_id(venue_id, "booking_url")[0]
     inflated_url = inflate_booking_url(url_template, date)
     return inflated_url
 
 @time_it
 def get_venue_sessions(venue_id):
     venue_sessions = rq.get_last_request(venue_id)
-    venue_name = venues_cfg.get_by_id(venue_id, "venue_name")["venue_name"]
+    venue_name = venues_cfg.venue_list.get_by_id(venue_id, VENUE_NAME)[0]
+    print(venue_name)
     sessions = []
 
     for court in venue_sessions.get("Resources"):
@@ -70,9 +71,9 @@ def get_venue_sessions(venue_id):
 
 def get_venues_list():
 
-    return venues_cfg.retrieve_params("venue_name", "venue_id")
+    return venues_cfg.venue_list.retrieve_params("venue_name", "venue_id")
 
 def get_venues_for_map():
     # the function is aware of the fields names
-    return venues_cfg.retrieve_params("venue_name", "venue_id", "latlng")
+    return venues_cfg.venue_list.retrieve_params("venue_name", "venue_id", "latlng")
 
