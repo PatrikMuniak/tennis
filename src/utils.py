@@ -28,7 +28,8 @@ def inflate_booking_url(url_template, date):
     return inflated_url
 
 def generate_booking_url(venue_id, date): 
-    url_template = venues_cfg.get_by_id(venue_id, "booking_url")["booking_url"]
+    query_out = venues_cfg.get_by_id(venue_id, "booking_url")
+    url_template = query_out.get("booking_url")
     inflated_url = inflate_booking_url(url_template, date)
     return inflated_url
 
