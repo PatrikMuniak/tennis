@@ -26,7 +26,6 @@ class VenueList(object):
         entry = VenueEntry(**kvargs)
         self._venue_list.append(entry)
 
-    
     def list_entries(self):
         for entry in self._venue_list:
             print(entry)
@@ -42,6 +41,12 @@ class VenueList(object):
         if len(ids) != len(self._venue_list):
             raise Exception("Venue missing id in config")
         return ids
+    
+    def has_id(self, id):
+        if id in self.ids():
+            return True
+        else:
+            return False
     
     def get_by_id(self, key, *args):
         for venue in self._venue_list:
