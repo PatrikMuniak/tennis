@@ -1,4 +1,4 @@
-from const import DB_PATH, VENUE_NAME
+from const import DB_PATH, VENUE_NAME, BOOKING_URL, VENUE_ID, LATLNG
 import json
 import sqlite3
 import datetime
@@ -29,7 +29,7 @@ def inflate_booking_url(url_template, date):
     return inflated_url
 
 def generate_booking_url(venue_id, date): 
-    url_template = venues_cfg.venue_list.get_by_id(venue_id, "booking_url")[0]
+    url_template = venues_cfg.venue_list.get_by_id(venue_id, BOOKING_URL)[0]
     inflated_url = inflate_booking_url(url_template, date)
     return inflated_url
 
@@ -44,11 +44,11 @@ def get_venue_sessions(venue_id):
         court_name = court.get("Name")
         for day in court.get("Days"):
             date = parse_dt_str_to_unix(day.get("Date"))
+            booking_url = generate_booking_url(venue_id, date)
             for session in day.get("Sessions"):
                 name = session.get("Name")
                 start = session.get("StartTime")
                 end = session.get("EndTime")
-                booking_url = generate_booking_url(venue_id, date)
                 if name == "6"or name=="10":
                     if end - start > 60:
                         for i in range(((end-start)//60)):
@@ -71,9 +71,9 @@ def get_venue_sessions(venue_id):
 
 def get_venues_list():
 
-    return venues_cfg.venue_list.retrieve_params("venue_name", "venue_id")
+    return venues_cfg.venue_list.retrieve_params(VENUE_NAME, VENUE_ID)
 
 def get_venues_for_map():
     # the function is aware of the fields names
-    return venues_cfg.venue_list.retrieve_params("venue_name", "venue_id", "latlng")
+    return venues_cfg.venue_list.retrieve_params(VENUE_NAME, VENUE_ID, LATLNG)
 
