@@ -1,8 +1,12 @@
 import yaml
 from const import VENUE_LIST, CONFIG_PATH
 from collections.abc import Sequence
+from enum import Enum
 # every request is a for loop, it can be optimized
-# if a parameter is missing there should be an error 
+# if a parameter is missing there should be an error
+ 
+
+
 
 class VenueEntry(object):
     def __init__(self, venue_name, venue_id, url, booking_url, latlng):
