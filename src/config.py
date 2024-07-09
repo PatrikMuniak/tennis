@@ -1,7 +1,6 @@
 import yaml
 from const import VENUE_LIST, CONFIG_PATH
 from collections.abc import Sequence
-from enum import Enum
 # every request is a for loop, it can be optimized
 # if a parameter is missing there should be an error
  
@@ -41,7 +40,6 @@ class VenueList(object):
         ids = set()
         for entry in self._venue_list:
             ids.add(entry.venue_id)
-            ids = set()
         if len(ids) != len(self._venue_list):
             raise Exception("Venue missing id in config")
         return ids
@@ -61,7 +59,7 @@ class VenueList(object):
                 return tuple(row)
         return -1
 
-    def retrieve_params(self, *args: Sequence[str]) -> dict:
+    def retrieve_params(self, *args) -> dict:
         out = []
         for venue in self._venue_list:
             row = {}
