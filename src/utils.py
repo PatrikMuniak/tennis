@@ -35,7 +35,7 @@ def generate_booking_url(venue_id, date):
 
 @time_it
 def get_venue_sessions(venue_id):
-    venue_sessions = rq.get_last_request(venue_id)
+    venue_sessions = rq.get_inflated_last_request(venue_id)
     venue_name = venues_cfg.venue_list.get_by_id(venue_id, VENUE_NAME)[0]
     print(venue_name)
     sessions = []

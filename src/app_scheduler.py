@@ -29,3 +29,12 @@ def retrieve_venue_sessions():
         con.commit()
         print(f'Finished fetching data for {venue_id} start: {start_date} end: {end_date} time_request: {round(end-start, 2)} ')
         time.sleep(10)
+
+# I query like here but then I process 
+
+# scrape_dt, venue_id, startTime, endTime, 
+
+
+# whenever we query we query we need to loop through as we need to inlate some values, so maybe just put the values 
+
+# if we insert the rows every time then we just pick 

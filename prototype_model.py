@@ -2,6 +2,9 @@ import json
 from stuff import REQUEST, RESOURCES, DAYS, SESSIONS
 
 class Session:
+    header_name = "sessionName"
+    header_start_time = "startTime"
+    header_end_time = "endTime"
     def __init__(self) -> None:
         self.name = None
         self.start_time = None 
@@ -13,7 +16,25 @@ class Session:
         self.end_time = content_dict.get(SESSIONS.EndTime)
     
     def to_dict(self):
-        return {"sessionName":self.name, "startTime":self.start_time, "endTime":self.end_time }
+        return {self.header_name:self.name, self.header_start_time:self.start_time, self.header_end_time:self.end_time }
+    
+    def to_list_portioned(self):
+        res = []
+
+        if self.end_time - self.start_time > 60:
+            for i in range(((self.end_time - self.start_time)//60)):
+                start_sess = self.start_time +60*i
+                end_sess = self.start_time +60*(i+1)
+                assert end_sess<=self.end_time
+                res.append({
+                    self.header_name:self.name,
+                    self.header_start_time:start_sess,
+                    self.header_end_time:end_sess})
+        else:
+            res.append({self.header_name:self.name,
+                        self.header_start_time:self.start_time,
+                        self.header_end_time:self.end_time})
+        return res
 
 class Day:
     def __init__(self) -> None:
@@ -29,6 +50,12 @@ class Day:
 
     def to_list(self):
         return [dict(date=self.date, **s.to_dict()) for s in self._sessions]
+
+    def to_list_portioned(self):
+        res = []
+        for s in self._sessions:
+            res+=[dict(date=self.date, **p) for p in s.to_list_portioned()]
+        return res
 
 
 
