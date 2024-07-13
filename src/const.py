@@ -39,3 +39,4 @@ Sessions = namedtuple("Sessions", sessions_fileds)
 SESSIONS = Sessions(*sessions_fileds)
 
 
+BOOKING_URL = "booking_url"

@@ -1,6 +1,7 @@
 import yaml
-from const import VENUE_LIST, CONFIG_PATH
+from const import VENUE_LIST, CONFIG_PATH, BOOKING_URL
 from collections.abc import Sequence
+import datetime
 # every request is a for loop, it can be optimized
 # if a parameter is missing there should be an error
  
@@ -69,6 +70,17 @@ class VenueList(object):
             out.append(row)
 
         return out
+    
+    def inflate_booking_url(self, url_template, date):
+        # url template should be an obj, at themoment the func is aware of the format of the str and the parameter
+        date_str = datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d')
+        inflated_url = url_template.format(date=date_str)
+        return inflated_url
+
+    def generate_booking_url(self, venue_id, date): 
+        url_template = self.get_by_id(venue_id, "booking_url")[0]
+        inflated_url = self.inflate_booking_url(url_template, date)
+        return inflated_url
 
 class VenueConfig:
     def __init__(self):
