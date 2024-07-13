@@ -7,6 +7,10 @@ pages = Blueprint('pages', __name__, template_folder='templates')
 def main():
     return render_template("main.html")
 
+@pages.route("/map")
+def map():
+    return render_template("map.html")
+
 @pages.route("/GetVenueSessions") 
 def get_venue_session():
     venue_id = request.args.get('venueId')

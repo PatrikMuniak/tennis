@@ -1,18 +1,66 @@
 
+    
+function renderPreferences(favs){
+    var select = document.getElementById('tbl-src-vn-nm');
+    for (var i=0; i<favs.length;i++){
+        if (favs[i].enabled){
+            var opt = document.createElement('option');
+            opt.value = favs[i].venue_id;
+            opt.innerHTML = favs[i].venue_name;
+            select.appendChild(opt);
+        }
+    }
 
-const venues = ["lyle", "stratford", "royalvictoria", "canning"]
+}
+
+
+function isFavsValid(){
+    try {
+        favs = JSON.parse(localStorage.getItem("favouriteVenues"))
+    } catch (e){
+        return false;
+    }
+    if ( favs == null && favs == undefined){
+        return false
+    }
+    return true
+}
+
+if (! isFavsValid()){
+    // take what you have and check if there are keys that are not there
+
+    var req = new XMLHttpRequest();
+    var url = new URL("/venues", location.origin)
+    
+    req.open("GET", url, false);
+    req.send(null);
+    venues_available = JSON.parse(req.responseText);
+    for (var i=0; i<venues_available.length; i++){
+        venues_available[i]["enabled"] = true
+    }
+    favs = JSON.stringify(venues_available)
+    
+    localStorage.setItem("favouriteVenues", favs)
+} else {
+    // compare both
+}
+// validation for session storage
+favs = JSON.parse(localStorage.getItem("favouriteVenues"))
+renderPreferences(favs)
+
 var tBodyRef = document.getElementById('ven-sess');
 var venue_sess = []
 
 
-for (var i=0; i< venues.length; i++){
-    var req = new XMLHttpRequest();
-    var url = new URL("/GetVenueSessions?venueId="+venues[i], location.origin)
-    
-    req.open("GET", url, false);
-    req.send(null);
-    console.log(venue_sess.length)
-    venue_sess = venue_sess.concat(JSON.parse(req.responseText));
+for (var i=0; i< favs.length; i++){
+    if (favs[i]["enabled"]){
+        var req = new XMLHttpRequest();
+        var url = new URL("/GetVenueSessions?venueId="+favs[i]["venue_id"], location.origin)
+        
+        req.open("GET", url, false);
+        req.send(null);
+        venue_sess = venue_sess.concat(JSON.parse(req.responseText));
+    }
 
 }
 
@@ -33,7 +81,6 @@ function getTimeString(startTime, endTime){
 }
 
 function renderTable(rows){
-    console.log(rows.length)
     for (var i = 0; i < rows.length; i++) {
         const row = rows[i]
         var r = tBodyRef.insertRow();
@@ -43,8 +90,18 @@ function renderTable(rows){
             var c = r.insertCell();
             c.appendChild(document.createTextNode(values[j]));
         }
+        var c = r.insertCell();
+        var a = document.createElement('a');
+        a.innerHTML = "Book&nbsp;"
+        a.title = "Book"
+        a.href = row["booking_url"]
+        a.target = "_blank"
+        a.classList.add("link-body-emphasis", "link-offset-2", "link-underline-opacity-25", "link-underline-opacity-75-hover")
+
+        c.appendChild(a)
     }
 }
+
 
 
 renderTable(venue_sess)
@@ -67,7 +124,7 @@ function filterDate(date, targetDate){
 
 function filterVenue(rowVal, inputVal){
     if (inputVal.length>0) {
-        return rowVal.startsWith(inputVal)
+        return rowVal == inputVal
     } else {
         return true
     }
@@ -105,7 +162,7 @@ function filterTable() {
 
     const res = venue_sess.filter((row) => {
         const isDate = filterDate(row['date'], inputDate)
-        const isVenue = filterVenue(row['venue_name'], inputVenue)
+        const isVenue = filterVenue(row['venue_id'], inputVenue)
         const afterTime = filterAfterTime(row['start'], inputStartTime)
         const beforeTime = filterBeforeTime(row['start'], inputStartTimeBefore)
         const condition = [isDate, isVenue, afterTime, beforeTime]

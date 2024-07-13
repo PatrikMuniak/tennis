@@ -1,6 +1,7 @@
 
 const map = L.map('map').setView([51.505, 0.024873357726036438], 13);
 
+<<<<<<< HEAD
 var OpenStreetMap_Mapnik = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	minZoom: 0,
 	maxZoom: 20,
@@ -9,6 +10,15 @@ var OpenStreetMap_Mapnik = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{
 
 
 
+=======
+var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 0,
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
+}).addTo(map);
+
+>>>>>>> 2aaa8657b5255931b9e09b38cbf07bc01cea92cc
 var MarkerIcon = L.icon({
     iconUrl: 'static/css/location-pin.svg',
     iconSize: [36, 36],
