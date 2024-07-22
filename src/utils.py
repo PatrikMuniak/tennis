@@ -27,7 +27,7 @@ def get_venue_sessions(id):
                 start = session.get("StartTime")
                 end = session.get("EndTime")
                 booking_url = venues_cfg.get_by_id(venue_id, "booking_url")["booking_url"].format(date=datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d'))
-                if name == "6"or name=="10":
+                if name.isnumeric():
                     if end - start > 60:
                         for i in range(((end-start)//60)):
                             start_sess = start +60*i
