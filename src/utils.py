@@ -1,63 +1,51 @@
-from const import DB_PATH
-import json
-import sqlite3
+from const import VENUE_NAME, BOOKING_URL, VENUE_ID, LATLNG
 import datetime
 import time
 from config import venues_cfg
+from models import request as rq
+import logging
 
 
-def get_venue_sessions(id):
+def time_it(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        res = func(*args, **kwargs)
+        end =  time.time()
+        logging.debug(f"{func.__name__} time:{round(end-start,2)}")
+        return res
+    return wrapper
 
-    con = sqlite3.connect(DB_PATH)
-    cur = con.cursor()
-    cur.execute('''select * from requests where venue_id=? order by rowid desc limit 1;''', (id,) )
-    query_out = cur.fetchone()
-    print(query_out)
-    venue_sessions = json.loads(query_out[2])
-    venue_name = query_out[3]
-    venue_id = query_out[1]
+def parse_dt_str_to_unix(datetime_string):
+    tuple_dt = datetime.datetime.strptime(datetime_string, "%Y-%m-%dT%H:%M:%S").timetuple()
+    unix_dt = time.mktime(tuple_dt)
+    return unix_dt
+
+def inflate_booking_url(url_template, date):
+    # url template should be an obj, at themoment the func is aware of the format of the str and the parameter
+    date_str = datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d')
+    inflated_url = url_template.format(date=date_str)
+    return inflated_url
+
+def generate_booking_url(venue_id, date): 
+    url_template = venues_cfg.venue_list.get_by_id(venue_id, BOOKING_URL)[0]
+    inflated_url = inflate_booking_url(url_template, date)
+    return inflated_url
+
+@time_it
+def get_venue_sessions(venue_id):
+    venue_sessions = rq.get_inflated_last_request(venue_id)
+    venue_name = venues_cfg.venue_list.get_by_id(venue_id, VENUE_NAME)[0]
+
     sessions = []
+    return venue_sessions
 
-    for court in venue_sessions.get("Resources"):
-        court_name = court.get("Name")
-        for day in court.get("Days"):
-            date = time.mktime(datetime.datetime.strptime(day.get("Date"), "%Y-%m-%dT%H:%M:%S").timetuple())
-            for session in day.get("Sessions"):
-                name = session.get("Name")
-                start = session.get("StartTime")
-                end = session.get("EndTime")
-                booking_url = venues_cfg.get_by_id(venue_id, "booking_url")["booking_url"].format(date=datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d'))
-                if name.isnumeric():
-                    if end - start > 60:
-                        for i in range(((end-start)//60)):
-                            start_sess = start +60*i
-                            end_sess = start +60*(i+1)
-                            assert end_sess<=end
-                            sessions.append({
-                                "venue_id":venue_id,
-                                "venue_name":venue_name,
-                                "date":date,
-                                "court_name":court_name,
-                                "name":name,
-                                "start":start_sess,
-                                "end":end_sess,
-                                "booking_url":booking_url})
-                    else:
-                        sessions.append({
-                                        "venue_id":venue_id,
-                                        "venue_name":venue_name,
-                                         "date":date,
-                                         "court_name":court_name,
-                                         "name":name,
-                                         "start":start,
-                                         "end":end,
-                                         "booking_url":booking_url})
-    return sessions
 
 def get_venues_list():
 
-    return venues_cfg.retrieve_params("venue_name", "venue_id")
+    return venues_cfg.venue_list.retrieve_params(VENUE_NAME, VENUE_ID)
 
 def get_venues_for_map():
+    # the function is aware of the fields names
+    return venues_cfg.venue_list.retrieve_params(VENUE_NAME, VENUE_ID, LATLNG)
 
-    return venues_cfg.retrieve_params("venue_name", "venue_id", "latlng")
+

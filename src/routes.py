@@ -1,7 +1,5 @@
-import json
 from flask import Blueprint, render_template, jsonify, request
 from utils import get_venue_sessions, get_venues_list, get_venues_for_map
-from config import venue_config
 
 pages = Blueprint('pages', __name__, template_folder='templates')
 
@@ -16,11 +14,8 @@ def map():
 @pages.route("/GetVenueSessions") 
 def get_venue_session():
     venue_id = request.args.get('venueId')
-    data = []
-    data+=get_venue_sessions(venue_id)
-    
+    data = get_venue_sessions(venue_id)
     return jsonify(data)
-
 
 @pages.route("/venues") 
 def get_venues():

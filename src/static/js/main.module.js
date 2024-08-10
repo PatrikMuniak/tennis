@@ -84,6 +84,7 @@ function renderTable(rows){
     for (var i = 0; i < rows.length; i++) {
         const row = rows[i]
         var r = tBodyRef.insertRow();
+
         var values = [row["venue_name"], getDateString(row["date"]),row["court_name"], getTimeString(row["start"], row["end"])]
         for (var j = 0; j<values.length; j++) {
             var c = r.insertCell();
