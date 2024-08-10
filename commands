@@ -7,7 +7,8 @@ ssh -i ~/.ssh/ubuntu-dell.pem ec2-user@ec2-52-209-185-155.eu-west-1.compute.amaz
 
 
 sudo yum install nginx
-sudo systemctl enable nginx && sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
 
 <<<<<<< Updated upstream
 scp -i ~/.ssh/ubuntu-dell.pem -r ~/code/lcb/src ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/ltcb
@@ -48,3 +49,57 @@ server {
 ssh -i ~/.ssh/thinkpad.pem ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com
 scp -i ~/.ssh/thinkpad.pem -r ~/code/tcbl/src ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/tcbl
 scp -i ~/.ssh/thinkpad.pem -r ~/code/tcbl/requirements.txt ec2-user@ec2-52-209-185-155.eu-west-1.compute.amazonaws.com:/local/tcbl/requirements.txt
+
+
+=====
+CREATE USER 
+
+useradd -m patrik
+visudo 
+
+patrik ALL=(ALL) NOPASSWD: ALL
+
+cd 
+mkdir /home/patrik/.ssh
+touch authorized_keys
+
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILqgKwaJ0jF8q4MevfnqsTr3mij/8eIwBep6V0n62Mue your_email@example.com" >> /home/patrik/.ssh/authorized_keys
+
+
+ssh patrik@164.92.146.189
+
+/mnt/volume_ams3_01
+
+
+sudo apt-get install nginx -y
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
+mkdir /mnt/volume_ams3_01/tcbl
+sudo groupadd www-data
+sudo usermod -a -G www-data patrik
+sudo usermod -a -G www-data nginx
+
+sudo chown patrik:www-data /mnt/volume_ams3_01/tcbl
+
+sudo apt install sqlite3 -y
+
+scp -r ~/code/tcbl/src patrik@164.92.146.189:/mnt/volume_ams3_01/tcbl
+scp -r ~/code/tcbl/requirements.txt patrik@164.92.146.189:/mnt/volume_ams3_01/tcbl/requirements.txt
+scp -r ~/code/tcbl/tcbl.service patrik@164.92.146.189:/mnt/volume_ams3_01/tcbl/tcbl.service
+
+sudo apt install python3.12-venv -y
+
+/usr/bin/python3 -m venv venv
+
+source venv/bin/activate
+pip install -r requirements.txt
+
+mkdir data
+
+cd /mnt/volume_ams3_01/tcbl
+sudo cp /mnt/volume_ams3_01/tcbl/tcbl.service /etc/systemd/system/tcbl.service
+
+sudo systemctl daemon-reload
+sudo systemctl start tcbl
+sudo systemctl enable tcbl

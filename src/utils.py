@@ -35,38 +35,10 @@ def generate_booking_url(venue_id, date):
 def get_venue_sessions(venue_id):
     venue_sessions = rq.get_inflated_last_request(venue_id)
     venue_name = venues_cfg.venue_list.get_by_id(venue_id, VENUE_NAME)[0]
-    # print(venue_name)
+
     sessions = []
-
-    # for court in venue_sessions.get("Resources"):
-    #     court_name = court.get("Name")
-    #     for day in court.get("Days"):
-    #         date = parse_dt_str_to_unix(day.get("Date"))
-    #         booking_url = generate_booking_url(venue_id, date)
-    #         for session in day.get("Sessions"):
-    #             name = session.get("Name")
-    #             start = session.get("StartTime")
-    #             end = session.get("EndTime")
-    #             if name == "6"or name=="10":
-    #                 if end - start > 60:
-    #                     for i in range(((end-start)//60)):
-    #                         start_sess = start +60*i
-    #                         end_sess = start +60*(i+1)
-    #                         assert end_sess<=end
-    #                         sessions.append({
-    #                             "venue_name":venue_name,
-    #                             "date":date,
-    #                             "court_name":court_name,
-    #                             "name":name,
-    #                             "start":start_sess,
-    #                             "end":end_sess})
-    #                 else:
-    #                     sessions.append({"venue_name":venue_name,"date":date,"court_name":court_name,"name":name,
-    #                                      "start":start,
-    #                                      "end":end,
-    #                                      "booking_url":booking_url})
-
     return venue_sessions
+
 
 def get_venues_list():
 
@@ -75,4 +47,5 @@ def get_venues_list():
 def get_venues_for_map():
     # the function is aware of the fields names
     return venues_cfg.venue_list.retrieve_params(VENUE_NAME, VENUE_ID, LATLNG)
+
 
