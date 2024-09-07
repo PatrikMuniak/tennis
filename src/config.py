@@ -2,6 +2,7 @@ import yaml
 from const import VENUE_LIST, CONFIG_PATH, BOOKING_URL
 from collections.abc import Sequence
 import datetime
+import time
 # every request is a for loop, it can be optimized
 # if a parameter is missing there should be an error
  
@@ -80,6 +81,18 @@ class VenueList(object):
     def generate_booking_url(self, venue_id, date): 
         url_template = self.get_by_id(venue_id, "booking_url")[0]
         inflated_url = self.inflate_booking_url(url_template, date)
+        return inflated_url
+    
+    def inflate_pull_url(self, url_template, start_date, end_date):
+        start = start_date.strftime('%Y-%m-%d')
+        end = end_date.strftime('%Y-%m-%d')
+        ts = int(time.time()*1000)
+        inflated_url = url_template.format(start_date=start, end_date=end, ts=ts)
+        return inflated_url
+
+    def generate_pull_url(self, venue_id, start_date, end_date):
+        url_template = self.get_by_id(venue_id, "url")[0]
+        inflated_url = self.inflate_pull_url(url_template, start_date, end_date)
         return inflated_url
 
 class VenueConfig:
