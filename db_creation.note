@@ -22,4 +22,3 @@ CREATE TABLE sessions (
     booking_url VARCHAR(160)
 );
 
-    

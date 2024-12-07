@@ -90,12 +90,34 @@ class Resource:
 
 class Request(object):
     def __init__(self):
+        self.dt = None
+        self.venue_id = None
         self._resources = []
+
 
     def load_json(self, json_content):
 
         content = json.loads(json_content)
         resources_list = content.get(REQUEST.Resources)
+        for resource in resources_list:
+            r = Resource()
+            r.load_from_dict(resource)
+            self._resources.append(r)
+    
+    def query_db_last_record(self, id):
+
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+
+        cur.execute('''select * from requests where venue_id=? order by rowid desc limit 1;''', (id,) )
+        query_out = cur.fetchone()
+
+        self.dt = query_out[0]
+        self.venue_id = query_out[1]
+        content = query_out[2]
+
+        json_data = json.loads(content)
+        resources_list = json_data.get(REQUEST.Resources)
         for resource in resources_list:
             r = Resource()
             r.load_from_dict(resource)
@@ -110,15 +132,9 @@ class Request(object):
 
 def get_inflated_last_request(id):
     if venues_cfg.venue_list.has_id(id):
-        con = sqlite3.connect(DB_PATH)
-        cur = con.cursor()
-
-        cur.execute('''select * from requests where venue_id=? order by rowid desc limit 1;''', (id,) )
-        query_out = cur.fetchone()
-
         req = Request()
-        req.load_json(query_out[2])
-        s = FreeSessions(id, req, venues_cfg)
+        req.query_db_last_record(id)
+        s = FreeSessions(req, venues_cfg)
         return s.get_sessions()
     else:
         return list()

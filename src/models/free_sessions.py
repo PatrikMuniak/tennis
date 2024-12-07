@@ -2,11 +2,11 @@ from const import BOOKING_URL
 from utils import get_time_from_int, generate_booking_url
 
 class FreeSessions:
-    def __init__(self, venue_id, request, venues_cfg):
-        self.venue_id = venue_id
+    def __init__(self, request, venues_cfg):
+        self.venue_id = request.venue_id
         # what if there is no such id?
-        self.venue_name = venues_cfg.venue_list.get_by_id(venue_id, "venue_name")[0]
-        self._sessions = self.initialize_sessions(request, venues_cfg)
+        self.venue_name = venues_cfg.get_venue_name(self.venue_id)
+        self._sessions = self.initialize_sessions(request)
 
     
     def get_sessions(self):
@@ -37,7 +37,7 @@ class FreeSessions:
         else:
             return False
 
-    def initialize_sessions(self, request, venues_cfg):
+    def initialize_sessions(self, request):
         res = []
         req_list = request.get_resources()
         for session in req_list:

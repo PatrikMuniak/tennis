@@ -84,6 +84,9 @@ class VenueList(object):
         inflated_url = self.inflate_pull_url(url_template, start_date, end_date)
         return inflated_url
 
+    def get_venue_name(self, id):
+        return self.get_by_id(id, "venue_name")[0]
+
 class VenueConfig:
     def __init__(self):
         self.venue_list = VenueList()
@@ -106,6 +109,9 @@ class VenueConfig:
         for venue in venue_list_dict:
             vn_lst.add_entry(**venue)
         self.venue_list = vn_lst
+    
+    def get_venue_name(self, id):
+        return self.venue_list.get_venue_name(id)
 
 venues_cfg = VenueConfig()
 venues_cfg.set_cfg_path(CONFIG_PATH)
