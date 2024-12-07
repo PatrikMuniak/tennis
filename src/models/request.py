@@ -4,6 +4,7 @@ from const import DB_PATH, REQUEST, RESOURCES, DAYS, SESSIONS, BOOKING_URL
 from config import venues_cfg
 import datetime
 import time
+from .free_sessions import FreeSessions
 
 class Session:
     header_name = "sessionName"
@@ -107,71 +108,18 @@ class Request(object):
         return res
     
 
-
-class SessionsProgram:
-    def __init__(self, venue_id, request, venues_cfg):
-        self.venue_id = venue_id
-        # what if there is no such id?
-        self.venue_name = venues_cfg.venue_list.get_by_id(venue_id, "venue_name")[0]
-        self.sessions = self.initialize_sessions(request, venues_cfg)
-    
-
-    
-    def split_by_session(self, s):
-        res = []
-        header_start_time = "start"
-        header_end_time = "end"
-
-        if s[header_end_time] - s[header_start_time] > 60:
-            for i in range(((s[header_end_time] - s[header_start_time])//60)):
-                temp_s = dict(s)
-                start_sess = temp_s[header_start_time] +60*i
-                end_sess = temp_s[header_start_time] +60*(i+1)
-                temp_s[header_start_time] = start_sess
-                temp_s[header_end_time] = end_sess
-                assert end_sess<=temp_s[header_end_time]
-                res.append(temp_s)
-        else:
-            res.append(s)
-        
-        return res
-
-
-# "venue_name":venue_name,
-# "date":date,
-# "court_name":court_name,
-# "name":name,
-# "start":start_sess,
-# "end":end_sess})
-    
-
-    def initialize_sessions(self, request, venues_cfg):
-        res = []
-        req_dict = request.get_resources()
-        for session in req_dict:
-            s = dict(session)
-            s["venue_name"] = self.venue_name
-            s[BOOKING_URL] = venues_cfg.venue_list.generate_booking_url(self.venue_id, s["date"])
-            res += self.split_by_session(s)
-        return res
-
-
-# venue id if you remove a venue id from the enum then it's not gonna be recognized
-# venue id is an id so it has to be unique
-
 def get_inflated_last_request(id):
-    venue_sessions = []
     if venues_cfg.venue_list.has_id(id):
         con = sqlite3.connect(DB_PATH)
         cur = con.cursor()
 
         cur.execute('''select * from requests where venue_id=? order by rowid desc limit 1;''', (id,) )
         query_out = cur.fetchone()
-        r = Request()
-        r.load_json(query_out[2])
-        s = SessionsProgram(id, r, venues_cfg)
-        venue_sessions = s.sessions
-        print(venue_sessions[0])
-        
-    return venue_sessions
 
+        req = Request()
+        req.load_json(query_out[2])
+        s = FreeSessions(id, req, venues_cfg)
+        return s.get_sessions()
+    else:
+        return list()
+        

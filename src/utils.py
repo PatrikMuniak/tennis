@@ -20,6 +20,9 @@ def parse_dt_str_to_unix(datetime_string):
     unix_dt = time.mktime(tuple_dt)
     return unix_dt
 
+def get_time_from_int(time_int):
+    return f"{time_int // 60}:{time_int%60}"
+
 def inflate_booking_url(url_template, date):
     # url template should be an obj, at themoment the func is aware of the format of the str and the parameter
     date_str = datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d')
@@ -33,11 +36,7 @@ def generate_booking_url(venue_id, date):
 
 @time_it
 def get_venue_sessions(venue_id):
-    venue_sessions = rq.get_inflated_last_request(venue_id)
-    venue_name = venues_cfg.venue_list.get_by_id(venue_id, VENUE_NAME)[0]
-
-    sessions = []
-    return venue_sessions
+    return rq.get_inflated_last_request(venue_id)
 
 
 def get_venues_list():

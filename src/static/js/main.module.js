@@ -123,6 +123,7 @@ function filterDate(date, targetDate){
 }
 
 function filterVenue(rowVal, inputVal){
+    
     if (inputVal.length>0) {
         return rowVal == inputVal
     } else {
@@ -159,7 +160,7 @@ function filterTable() {
     const inputDate = dateInput.value
     const inputStartTime = startInput.value
     const inputStartTimeBefore = startInputBefore.value
-
+    
     const res = venue_sess.filter((row) => {
         const isDate = filterDate(row['date'], inputDate)
         const isVenue = filterVenue(row['venue_id'], inputVenue)

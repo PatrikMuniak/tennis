@@ -3,7 +3,7 @@ import json
 from collections import namedtuple
 
 
-DB_PATH = os.path.join(os.path.abspath('..'),"data","tcbl.db")
+DB_PATH = os.path.join(os.path.abspath('..'),"data","tennis.db")
 CONFIG_PATH = "config.yaml"
 
 # constants for values here randomly on const are too scattered and are not part of a group so people can make a mistake and 
@@ -26,7 +26,6 @@ resources_fileds = ("Name", "Days")
 Resources = namedtuple("Resources", resources_fileds)
 RESOURCES = Resources(*resources_fileds)
 
-# print(Request.Resources)
 
 # Days
 days_fileds = ("Date", "Sessions")
