@@ -32,8 +32,7 @@ class TestRequest(unittest.TestCase):
 
         
         req = Request()
-        req.load_json(json.dumps(json_str))
-        req.venue_id="canning"
+        req.load_json(json.dumps(json_str),"canning")
         s = FreeSessions(req, venues_cfg)
         self.assertEqual(s.get_sessions(), expect)
 
@@ -64,7 +63,7 @@ class TestRequest(unittest.TestCase):
         expect = []
         
         req = Request()
-        req.load_json(json.dumps(json_str))
+        req.load_json(json.dumps(json_str),"canning")
         req.venue_id="canning"
         s = FreeSessions(req, venues_cfg)
         self.assertEqual(s.get_sessions(), expect)

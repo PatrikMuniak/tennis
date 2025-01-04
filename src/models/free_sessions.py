@@ -39,11 +39,10 @@ class FreeSessions:
 
     def initialize_sessions(self, request):
         res = []
-        req_list = request.get_resources()
+        req_list = request.get_sessions()
         for session in req_list:
             s = dict(session)
             s["venue_name"] = self.venue_name
-            s["venue_id"] = self.venue_id
             s[BOOKING_URL] = generate_booking_url(self.venue_id, s["date"])
             if self.is_session_free(session):
                 res += self.split_by_session(s)

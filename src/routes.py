@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request
 from utils import get_venue_sessions, get_venues_list, get_venues_for_map
 
-pages = Blueprint('pages', __name__, template_folder='templates')
+pages = Blueprint('pages', __name__, template_folder='static/templates')
 
 @pages.route("/")
 def main():

@@ -59,7 +59,7 @@ class VenueList(object):
                 for arg in args:
                     row.append(venue.get(arg))
                 return tuple(row)
-        return -1
+        return None
 
     def retrieve_params(self, *args) -> dict:
         out = []
