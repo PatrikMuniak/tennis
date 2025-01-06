@@ -5,7 +5,7 @@ import sqlite3
 import requests
 from const import DB_PATH  
 from config import venues_cfg
-from models.request import Request
+from models.request import Request, Requests, Database
 from models.free_sessions import FreeSessions
 import logging
 
@@ -16,7 +16,6 @@ scheduler = APScheduler()
 
 @scheduler.task('interval', id='retrieve_venue_sessions', seconds=60*14, misfire_grace_time=900) #60*14
 def retrieve_venue_sessions():
-    print("logging doesn't work")
     logging.info("starting to fetch sessions")
     start_date =  datetime.datetime.today()
     end_date = (datetime.datetime.today()+datetime.timedelta(days=13))
@@ -76,3 +75,13 @@ def retrieve_venue_sessions():
 #                venue_id,
 #                booking_url))
 #         con.commit()
+
+
+
+@scheduler.task('interval', id='cleanup_old_requests_records', seconds=60*30, misfire_grace_time=900) #60*14
+def cleanup_venue_sessions():
+    db = Database(DB_PATH)
+    requests = Requests(db)
+    requests.remove_records_older_than_a_week()
+    
+# if something is older than 7 days remove

@@ -1,3 +1,6 @@
+app:
+  db:
+    path: ../data/tennis.db
 venue_list:
   - venue_name: Lyle Park Tennis Courts
     venue_id: lyle

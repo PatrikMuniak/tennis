@@ -7,55 +7,13 @@ import time
 from .free_sessions import FreeSessions
 from utils import parse_dt_str_to_unix
 
-# class Day:
-#     def __init__(self) -> None:
-#         self._sessions = []
-
-    
-#     def load_from_dict(self, day):
-#         for session in day.get(DAYS.Sessions):
-#             self._sessions.append({"sessionName":session.get(SESSIONS.Name), 
-#                                    "start":session.get(SESSIONS.StartTime), 
-#                                    "end":session.get(SESSIONS.EndTime),
-#                                    "date":parse_dt_str_to_unix(day.get(DAYS.Date))
-#                                    })
-
-#     def to_list(self):
-#         return self._sessions
-
-class Resource:
-    def __init__(self) -> None:
-        self._sessions = []
-        self.name = None
-
-    def get_day_sessions(self, day_data):
-        day_sessions = []
-        for session in day_data.get(DAYS.Sessions):
-            day_sessions.append({"sessionName":session.get(SESSIONS.Name), 
-                                   "start":session.get(SESSIONS.StartTime), 
-                                   "end":session.get(SESSIONS.EndTime),
-                                   "date":parse_dt_str_to_unix(day_data.get(DAYS.Date))
-                                   })
-        return day_sessions
-
-    def load_from_dict(self, resource_data):
-        name = resource_data.get(RESOURCES.Name)
-        for day in resource_data.get(RESOURCES.Days):
-            day_sess = self.get_day_sessions(day)
-            for  session in day_sess:
-                session["court_name"] = name
-                self._sessions.append(session)
-
-    def to_list(self):
-        return self._sessions
-
-
-
+#the session part should go to another class 
 class Request(object):
     def __init__(self):
         self.dt = None
         self.venue_id = None
-        self._sessions = []
+        self.__sessions = []
+    
 
     def get_day_sessions(self, day_data):
         day_sessions = []
@@ -90,7 +48,7 @@ class Request(object):
             for s in resource_sessions:
                 s["venue_id"] = venue_id
 
-                self._sessions.append(s)
+                self.__sessions.append(s)
         
     
     def save(self, venue_id, content):
@@ -99,31 +57,60 @@ class Request(object):
         cur = con.cursor()
         cur.execute('''INSERT INTO requests (venue_id, content, dt) VALUES (?, ?, ?)''', (venue_id, content, dt) )
         con.commit()
+        con.close()
     
-    def query_db_last_record(self, id):
-
-        con = sqlite3.connect(DB_PATH)
-        cur = con.cursor()
-
-        cur.execute('''select * from requests where venue_id=? order by rowid desc limit 1;''', (id,) )
-        query_out = cur.fetchone()
-
-        self.dt = query_out[0]
-        self.venue_id = query_out[1]
-        content = query_out[2]
+    def load_from_db(self, query_output):
+        self.dt = query_output[0]
+        self.venue_id = query_output[1]
+        content = query_output[2]
 
         self.load_json(content, self.venue_id)
         
     
     def get_sessions(self):
-        return self._sessions
+        return self.__sessions
     
+class Database:
+    def __init__(self, db_path):
+        self.db_path = db_path
+
+    def update(self, query, args):
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        cur.execute(query, args)
+        con.commit()
+        con.close()
+
+    def fetchone(self, query, args):
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        cur.execute(query, args)
+        result = cur.fetchone()
+        con.close()
+        return result
+
+
+class Requests:
+    def __init__(self, database):
+        self.database = database
+
+    def remove_records_older_than_a_week(self):
+        self.database.update('''DELETE FROM requests WHERE date(dt) < date('now','-7 days');''')
+    
+    def query_db_last_record(self, id):
+
+        query_out = self.database.fetchone('''SELECT * FROM requests WHERE venue_id=? ORDER BY rowid desc LIMIT 1;''', (id,) )
+        request = Request()
+        request.load_from_db(query_out)
+        return request
+        
 
 def get_inflated_last_request(id):
     if venues_cfg.venue_list.has_id(id):
-        req = Request()
-        req.query_db_last_record(id)
-        s = FreeSessions(req, venues_cfg)
+        db = Database(DB_PATH)
+        requests = Requests(db)
+        request = requests.query_db_last_record(id)
+        s = FreeSessions(request, venues_cfg)
         return s.get_sessions()
     else:
         return list()

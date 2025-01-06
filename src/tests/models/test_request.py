@@ -1,5 +1,5 @@
 import unittest
-from models.request import Request 
+from models.request import Request, Database
 from models.free_sessions import FreeSessions
 from config import venues_cfg
 import json
@@ -67,6 +67,9 @@ class TestRequest(unittest.TestCase):
         req.venue_id="canning"
         s = FreeSessions(req, venues_cfg)
         self.assertEqual(s.get_sessions(), expect)
+    
+    def test_get_inflated_last_request_empty(self):
+        db = Database("../data/test.db")
 
 if __name__ == '__main__':
     unittest.main()
