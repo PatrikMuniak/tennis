@@ -163,8 +163,6 @@ function isWeekend(unixDateTime){
 function filterOffWork(date, startTime, endTime, enabled){
     
     if (enabled) {
-        // check if the day of the date is festive or it's out of 9 to 5
-        console.log(startTime, date, enabled, "day", new Date(date*1000).getDay(), "isweekend", isWeekend(date))
         const startWork = 9*60 
         const endWork = 17*60
 
