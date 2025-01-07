@@ -9,10 +9,11 @@ from utils import parse_dt_str_to_unix
 
 #the session part should go to another class 
 class Request(object):
-    def __init__(self):
-        self.dt = None
-        self.venue_id = None
+    def __init__(self, dt=None, venue_id=None, content=""):
+        self.dt = dt
+        self.venue_id = venue_id
         self.__sessions = []
+        self.content = content
     
 
     def get_day_sessions(self, day_data):
@@ -51,14 +52,7 @@ class Request(object):
                 self.__sessions.append(s)
         
     
-    def save(self, venue_id, content):
-        dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        con = sqlite3.connect(DB_PATH)
-        cur = con.cursor()
-        cur.execute('''INSERT INTO requests (venue_id, content, dt) VALUES (?, ?, ?)''', (venue_id, content, dt) )
-        con.commit()
-        con.close()
-    
+ 
     def load_from_db(self, query_output):
         self.dt = query_output[0]
         self.venue_id = query_output[1]
@@ -73,11 +67,16 @@ class Request(object):
 class Database:
     def __init__(self, db_path):
         self.db_path = db_path
+    
+    # here I can use a decorator that initialized the cursor and after the query is complete closes the connection
 
-    def update(self, query, args):
+    def update(self, query, args=set()):
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
-        cur.execute(query, args)
+        if args:
+            cur.execute(query, args)
+        else:
+            cur.execute(query)
         con.commit()
         con.close()
 
@@ -86,6 +85,14 @@ class Database:
         cur = con.cursor()
         cur.execute(query, args)
         result = cur.fetchone()
+        con.close()
+        return result
+    
+    def fetchall(self, query, args):
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        cur.execute(query, args)
+        result = cur.fetchall()
         con.close()
         return result
 
@@ -103,6 +110,14 @@ class Requests:
         request = Request()
         request.load_from_db(query_out)
         return request
+    
+    def insert(self, request):
+        self.database.update('''INSERT INTO requests (venue_id, content, dt) VALUES (?, ?, ?)''', (request.venue_id, request.content, request.dt) )
+
+    def get_all_by_venue_id(self, venue_id):
+        query_out = self.database.fetchone('''SELECT * FROM requests WHERE venue_id=? ORDER BY rowid desc LIMIT 1;''', (venue_id,) )
+        return query_out
+
         
 
 def get_inflated_last_request(id):

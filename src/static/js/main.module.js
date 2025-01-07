@@ -110,6 +110,7 @@ const startInput = document.getElementById('tbl-src-strt');
 const startInputBefore = document.getElementById('tbl-src-strt-bfr');
 const venueNameInput = document.getElementById('tbl-src-vn-nm')
 const dateInput = document.getElementById('tbl-src-dt')
+const offWorkCheck = document.getElementById('tbl-src-iowc');
 
 function filterDate(date, targetDate){
     if (targetDate.length>0) {
@@ -153,6 +154,34 @@ function filterBeforeTime(rowTime, inputTime){
     }
 
 }
+function isWeekend(unixDateTime){
+    const date = new Date(unixDateTime*1000)
+    if (date.getDay() == 6 || date.getDay() == 0) return true;
+    return false
+}
+
+function filterOffWork(date, startTime, endTime, enabled){
+    
+    if (enabled) {
+        // check if the day of the date is festive or it's out of 9 to 5
+        console.log(startTime, date, enabled, "day", new Date(date*1000).getDay(), "isweekend", isWeekend(date))
+        const startWork = 9*60 
+        const endWork = 17*60
+
+        if (isWeekend(date)){
+            return true;
+        } else if (endTime <= startWork || startTime >= endWork){
+            console.log("week day")
+            return true;
+        } else{
+            return false;
+        }
+        
+    } else {
+        return true
+    }
+
+}
 
 
 function filterTable() {
@@ -160,13 +189,15 @@ function filterTable() {
     const inputDate = dateInput.value
     const inputStartTime = startInput.value
     const inputStartTimeBefore = startInputBefore.value
+    const offWorkChecked = offWorkCheck.checked
     
     const res = venue_sess.filter((row) => {
         const isDate = filterDate(row['date'], inputDate)
         const isVenue = filterVenue(row['venue_id'], inputVenue)
         const afterTime = filterAfterTime(row['start'], inputStartTime)
         const beforeTime = filterBeforeTime(row['start'], inputStartTimeBefore)
-        const condition = [isDate, isVenue, afterTime, beforeTime]
+        const offWork = filterOffWork(row['date'], row['start'], row['end'], offWorkChecked)
+        const condition = [isDate, isVenue, afterTime, beforeTime, offWork]
         return condition.every(v => v===true)
         
     })
@@ -179,3 +210,4 @@ startInput.addEventListener("input", filterTable);
 startInputBefore.addEventListener("input", filterTable);
 dateInput.addEventListener("input", filterTable);
 venueNameInput.addEventListener("input", filterTable);
+offWorkCheck.addEventListener("change", filterTable);

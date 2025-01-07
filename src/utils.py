@@ -34,6 +34,9 @@ def generate_booking_url(venue_id, date):
     inflated_url = inflate_booking_url(url_template, date)
     return inflated_url
 
+def serialize_datetime(dt: datetime) -> str:
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
+
 @time_it
 def get_venue_sessions(venue_id):
     return rq.get_inflated_last_request(venue_id)

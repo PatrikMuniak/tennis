@@ -1,8 +1,11 @@
 import unittest
-from models.request import Request, Database
+from models.request import Request, Database, Requests
 from models.free_sessions import FreeSessions
 from config import venues_cfg
 import json
+from datetime import datetime, timedelta
+from utils import serialize_datetime
+import os
 
 class TestRequest(unittest.TestCase):
 
@@ -69,7 +72,31 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(s.get_sessions(), expect)
     
     def test_get_inflated_last_request_empty(self):
-        db = Database("../data/test.db")
+        db_file = "../data/test.db"
+        db = Database(db_file)
+        if os.path.isfile(db_file):
+            os.remove(db_file)
+        db.update("""CREATE TABLE requests (
+                    dt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    venue_id VARCHAR(40),
+                    content TEXT
+                );
+                """)
+        requests = Requests(db)
+        req_old = Request(dt=serialize_datetime(datetime.today() - timedelta(days= 8)), venue_id="test", content="" )
+        req_new = Request(dt=serialize_datetime(datetime.today()), venue_id="test", content="" )
+        requests.insert(req_old)
+        requests.insert(req_new)
+        assert(len(requests.get_all_by_venue_id("test")) == 2)
+        requests.remove_records_older_than_a_week()
+        assert(len(requests.get_all_by_venue_id("test")) == 1)
+
+        if os.path.isfile(db_file):
+            os.remove(db_file)
+
+
+
+        
 
 if __name__ == '__main__':
     unittest.main()

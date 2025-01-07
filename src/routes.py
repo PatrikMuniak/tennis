@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, jsonify, request
+from flask import Blueprint, render_template, jsonify, request, send_from_directory
 from utils import get_venue_sessions, get_venues_list, get_venues_for_map
+import os
 
 pages = Blueprint('pages', __name__, template_folder='static/templates')
 
@@ -26,3 +27,7 @@ def get_venues():
 def get_marker_data():
     data = get_venues_for_map()
     return jsonify(data)
+
+@pages.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')

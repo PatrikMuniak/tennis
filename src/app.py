@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 
 from app_scheduler import scheduler
 from routes import pages
@@ -15,8 +15,3 @@ scheduler.init_app(app)
 scheduler.start()
 
 app.register_blueprint(blueprint=pages)
-
-
-
-    
-
