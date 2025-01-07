@@ -169,7 +169,6 @@ function filterOffWork(date, startTime, endTime, enabled){
         if (isWeekend(date)){
             return true;
         } else if (endTime <= startWork || startTime >= endWork){
-            console.log("week day")
             return true;
         } else{
             return false;
