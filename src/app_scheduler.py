@@ -1,12 +1,10 @@
 from flask_apscheduler import APScheduler
 import datetime
 import time
-import sqlite3
 import requests
 from const import DB_PATH  
 from config import venues_cfg
 from models.request import Request, Requests, Database
-from models.free_sessions import FreeSessions
 import logging
 
 
@@ -39,7 +37,7 @@ def retrieve_venue_sessions():
 # req = Request()
 #         req.load_json(venue_sessions, venue_id)
 #         # passing an empty request doesn't make sense
-#         s = FreeSessions(req, venues_cfg)
+#         s = Sessions(req, venues_cfg)
 #         con = sqlite3.connect(DB_PATH)
 #         cur = con.cursor()
 

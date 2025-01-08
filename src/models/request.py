@@ -2,13 +2,18 @@ import sqlite3
 import json
 from const import DB_PATH, REQUEST, RESOURCES, DAYS, SESSIONS, BOOKING_URL
 from config import venues_cfg
-import datetime
-import time
-from .free_sessions import FreeSessions
+from .sessions import Sessions
 from utils import parse_dt_str_to_unix
 
 #the session part should go to another class 
 class Request(object):
+    """
+    Request is the row of the table requests
+    it's made of:
+        - dt
+        - venue_id
+        - content
+    """
     def __init__(self, dt=None, venue_id=None, content=""):
         self.dt = dt
         self.venue_id = venue_id
@@ -115,9 +120,14 @@ class Requests:
         self.database.update('''INSERT INTO requests (venue_id, content, dt) VALUES (?, ?, ?)''', (request.venue_id, request.content, request.dt) )
 
     def get_all_by_venue_id(self, venue_id):
-        query_out = self.database.fetchone('''SELECT * FROM requests WHERE venue_id=? ORDER BY rowid desc LIMIT 1;''', (venue_id,) )
+        query_out = self.database.fetchall('''SELECT * FROM requests WHERE venue_id=?;''', (venue_id,) )
         return query_out
-
+    
+    def get_venue_ids(self):
+        return self.database.fetchall("SELECT UNIQUE(venue_id) FROM requests;")
+    
+    def has_venue_id(self, id):
+        return id in self.get_venue_ids()
         
 
 def get_inflated_last_request(id):
@@ -125,7 +135,7 @@ def get_inflated_last_request(id):
         db = Database(DB_PATH)
         requests = Requests(db)
         request = requests.query_db_last_record(id)
-        s = FreeSessions(request, venues_cfg)
+        s = Sessions(request, venues_cfg)
         return s.get_sessions()
     else:
         return list()

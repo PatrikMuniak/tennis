@@ -1,7 +1,16 @@
 from const import BOOKING_URL
-from utils import get_time_from_int, generate_booking_url
+from utils import generate_booking_url
+#  Added this item but I need to continue
+# class Session:
+#     def __init__(self, venue_id, date, court_name, sessionName, start, end):
+#         self.sessionName = sessionName
+#         self.start = start
+#         self.end = end
+#         self.date = date
+#         self.court_name = court_name
+#         self.venue_id = venue_id
 
-class FreeSessions:
+class Sessions:
     def __init__(self, request, venues_cfg):
         self.venue_id = request.venue_id
         # what if there is no such id?
@@ -12,14 +21,14 @@ class FreeSessions:
     def get_sessions(self):
         return self._sessions
     
-    def split_by_session(self, s):
+    def _split_session_by_hour(self, session):
         res = []
         header_start_time = "start"
         header_end_time = "end"
 
-        if s[header_end_time] - s[header_start_time] > 60:
-            for i in range(((s[header_end_time] - s[header_start_time])//60)):
-                temp_s = dict(s)
+        if session[header_end_time] - session[header_start_time] > 60:
+            for i in range(((session[header_end_time] - session[header_start_time])//60)):
+                temp_s = dict(session)
                 start_sess = temp_s[header_start_time] +60*i
                 end_sess = temp_s[header_start_time] +60*(i+1)
                 temp_s[header_start_time] = start_sess
@@ -27,7 +36,7 @@ class FreeSessions:
                 assert end_sess<=temp_s[header_end_time]
                 res.append(temp_s)
         else:
-            res.append(s)
+            res.append(session)
         
         return res
     
@@ -45,5 +54,19 @@ class FreeSessions:
             s["venue_name"] = self.venue_name
             s[BOOKING_URL] = generate_booking_url(self.venue_id, s["date"])
             if self.is_session_free(session):
-                res += self.split_by_session(s)
+                res += self._split_session_by_hour(s)
         return res
+
+
+    def get_inflated_last_request(self, id):
+        if venues_cfg.venue_list.has_id(id):
+            db = Database(DB_PATH)
+            requests = Requests(db)
+            request = requests.query_db_last_record(id)
+            s = Sessions(request, venues_cfg)
+            return s.get_sessions()
+        else:
+            return list()
+        
+
+

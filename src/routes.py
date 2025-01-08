@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory
 from utils import get_venue_sessions, get_venues_list, get_venues_for_map
-import os
+
 
 pages = Blueprint('pages', __name__, template_folder='static/templates')
 

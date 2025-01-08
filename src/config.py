@@ -1,7 +1,5 @@
 import yaml
-from const import VENUE_LIST, CONFIG_PATH, BOOKING_URL
-from collections.abc import Sequence
-import datetime
+from const import VENUE_LIST, CONFIG_PATH
 import time
 # every request is a for loop, it can be optimized
 # if a parameter is missing there should be an error

@@ -1,6 +1,6 @@
 import unittest
 from models.request import Request, Database, Requests
-from models.free_sessions import FreeSessions
+from models.sessions import Sessions
 from config import venues_cfg
 import json
 from datetime import datetime, timedelta
@@ -36,7 +36,7 @@ class TestRequest(unittest.TestCase):
         
         req = Request()
         req.load_json(json.dumps(json_str),"canning")
-        s = FreeSessions(req, venues_cfg)
+        s = Sessions(req, venues_cfg)
         self.assertEqual(s.get_sessions(), expect)
 
 
@@ -68,14 +68,15 @@ class TestRequest(unittest.TestCase):
         req = Request()
         req.load_json(json.dumps(json_str),"canning")
         req.venue_id="canning"
-        s = FreeSessions(req, venues_cfg)
+        s = Sessions(req, venues_cfg)
         self.assertEqual(s.get_sessions(), expect)
     
     def test_get_inflated_last_request_empty(self):
         db_file = "../data/test.db"
-        db = Database(db_file)
         if os.path.isfile(db_file):
             os.remove(db_file)
+            print("Setting up the Removing test db file.")
+        db = Database(db_file)
         db.update("""CREATE TABLE requests (
                     dt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     venue_id VARCHAR(40),
@@ -83,14 +84,13 @@ class TestRequest(unittest.TestCase):
                 );
                 """)
         requests = Requests(db)
-        req_old = Request(dt=serialize_datetime(datetime.today() - timedelta(days= 8)), venue_id="test", content="" )
-        req_new = Request(dt=serialize_datetime(datetime.today()), venue_id="test", content="" )
+        req_old = Request(dt=serialize_datetime(datetime.today() - timedelta(days= 8)), venue_id="test", content="")
+        req_new = Request(dt=serialize_datetime(datetime.today()), venue_id="test", content="")
         requests.insert(req_old)
         requests.insert(req_new)
-        assert(len(requests.get_all_by_venue_id("test")) == 2)
+        self.assertEqual(len(requests.get_all_by_venue_id("test")), 2)
         requests.remove_records_older_than_a_week()
-        assert(len(requests.get_all_by_venue_id("test")) == 1)
-
+        self.assertEqual(len(requests.get_all_by_venue_id("test")), 1)
         if os.path.isfile(db_file):
             os.remove(db_file)
 
