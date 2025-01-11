@@ -33,7 +33,13 @@ def retrieve_venue_sessions():
         logging.info(f'Finished fetching data for {venue_id} start: {start_date} end: {end_date} time_request: {round(end-start, 2)} ')
         time.sleep(10)
 
-
+@scheduler.task('interval', id='cleanup_old_requests_records', seconds=60*30, misfire_grace_time=900) #60*14
+def cleanup_venue_sessions():
+    db = Database(DB_PATH)
+    requests = Requests(db)
+    requests.remove_records_older_than_a_week()
+    
+# if something is older than 7 days remove
 # req = Request()
 #         req.load_json(venue_sessions, venue_id)
 #         # passing an empty request doesn't make sense
@@ -73,13 +79,3 @@ def retrieve_venue_sessions():
 #                venue_id,
 #                booking_url))
 #         con.commit()
-
-
-
-@scheduler.task('interval', id='cleanup_old_requests_records', seconds=60*30, misfire_grace_time=900) #60*14
-def cleanup_venue_sessions():
-    db = Database(DB_PATH)
-    requests = Requests(db)
-    requests.remove_records_older_than_a_week()
-    
-# if something is older than 7 days remove

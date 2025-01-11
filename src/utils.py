@@ -2,7 +2,7 @@ from const import VENUE_NAME, BOOKING_URL, VENUE_ID, LATLNG
 import datetime
 import time
 from config import venues_cfg
-from models import request as rq
+from models import sessions as ss
 import logging
 
 
@@ -39,7 +39,7 @@ def serialize_datetime(dt: datetime) -> str:
 
 @time_it
 def get_venue_sessions(venue_id):
-    return rq.get_inflated_last_request(venue_id)
+    return ss.get_inflated_last_request(venue_id)
 
 
 def get_venues_list():

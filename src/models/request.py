@@ -1,9 +1,4 @@
 import sqlite3
-import json
-from const import DB_PATH, REQUEST, RESOURCES, DAYS, SESSIONS, BOOKING_URL
-from config import venues_cfg
-from .sessions import Sessions
-from utils import parse_dt_str_to_unix
 
 #the session part should go to another class 
 class Request(object):
@@ -17,58 +12,14 @@ class Request(object):
     def __init__(self, dt=None, venue_id=None, content=""):
         self.dt = dt
         self.venue_id = venue_id
-        self.__sessions = []
         self.content = content
-    
-
-    def get_day_sessions(self, day_data):
-        day_sessions = []
-        for session in day_data.get(DAYS.Sessions):
-            day_sessions.append({"sessionName":session.get(SESSIONS.Name), 
-                                   "start":session.get(SESSIONS.StartTime), 
-                                   "end":session.get(SESSIONS.EndTime),
-                                   "date":parse_dt_str_to_unix(day_data.get(DAYS.Date))
-                                   })
-        return day_sessions
-
-    def get_resource_sessions(self, resource_data):
-        name = resource_data.get(RESOURCES.Name)
-        resource_sessions = []
-
-        for day in resource_data.get(RESOURCES.Days):
-            day_sess = self.get_day_sessions(day)
-            for  session in day_sess:
-                session["court_name"] = name
-                resource_sessions.append(session)
-        return resource_sessions
-
-    def load_json(self, json_content, venue_id):
-        self.venue_id = venue_id
-
-        content = json.loads(json_content)
-        resources_list = content.get(REQUEST.Resources)
-        for resource in resources_list:
-            
-            resource_sessions = self.get_resource_sessions(resource)
-
-            for s in resource_sessions:
-                s["venue_id"] = venue_id
-
-                self.__sessions.append(s)
-        
-    
- 
+#  the order should be decided by the requests class
     def load_from_db(self, query_output):
         self.dt = query_output[0]
         self.venue_id = query_output[1]
-        content = query_output[2]
+        self.content = query_output[2]
 
-        self.load_json(content, self.venue_id)
-        
-    
-    def get_sessions(self):
-        return self.__sessions
-    
+
 class Database:
     def __init__(self, db_path):
         self.db_path = db_path
@@ -127,16 +78,4 @@ class Requests:
         return self.database.fetchall("SELECT UNIQUE(venue_id) FROM requests;")
     
     def has_venue_id(self, id):
-        return id in self.get_venue_ids()
-        
-
-def get_inflated_last_request(id):
-    if venues_cfg.venue_list.has_id(id):
-        db = Database(DB_PATH)
-        requests = Requests(db)
-        request = requests.query_db_last_record(id)
-        s = Sessions(request, venues_cfg)
-        return s.get_sessions()
-    else:
-        return list()
-        
+        return id in self.get_venue_ids()     
