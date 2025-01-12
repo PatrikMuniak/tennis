@@ -1,11 +1,13 @@
 import unittest
-from models.request import Request, Database, Requests
+from models.request import Request, Requests, DateTs
 from models.sessions import Sessions
 from config import venues_cfg
 import json
 from datetime import datetime, timedelta
 from utils import serialize_datetime
 import os
+from models.database import Database
+import time
 
 class TestRequest(unittest.TestCase):
 
@@ -34,8 +36,6 @@ class TestRequest(unittest.TestCase):
         expect = []
         
         req = Request(content=json_str, venue_id="canning")
-        # req.load_json(json.dumps(json_str),"canning")
-        # req.venue_id="canning"
         s = Sessions(req, venues_cfg)
         self.assertEqual(s.get_sessions(), expect)
     
@@ -52,8 +52,14 @@ class TestRequest(unittest.TestCase):
                 );
                 """)
         requests = Requests(db)
-        req_old = Request(dt=serialize_datetime(datetime.today() - timedelta(days= 8)), venue_id="test", content="")
-        req_new = Request(dt=serialize_datetime(datetime.today()), venue_id="test", content="")
+
+        old_dt = DateTs()
+        new_dt = DateTs()
+        old_dt.value = (datetime.today() - timedelta(days= 8)).timestamp()
+        new_dt.value = datetime.today().timestamp()
+        
+        req_old = Request(dt=old_dt, venue_id="test", content="")
+        req_new = Request(dt=new_dt, venue_id="test", content="")
         requests.insert(req_old)
         requests.insert(req_new)
         self.assertEqual(len(requests.get_all_by_venue_id("test")), 2)
@@ -61,6 +67,16 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(len(requests.get_all_by_venue_id("test")), 1)
         if os.path.isfile(db_file):
             os.remove(db_file)
+    
+    def test_date_ts(self):
+        unix_ts = 1736688423
+
+        dt = DateTs()
+        dt.value = unix_ts
+        # print(time.time())
+        # print(dt.value)
+        self.assertEqual(dt.value, "2025-01-12 13:27:03")
+
 
 
 

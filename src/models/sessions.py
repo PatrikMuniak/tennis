@@ -2,25 +2,16 @@ from const import BOOKING_URL
 from const import DB_PATH, REQUEST, RESOURCES, DAYS, SESSIONS, BOOKING_URL
 import json
 import utils
-from .request import Request, Database, Requests
+from .request import Request, Requests
+from .database import Database
 from config import venues_cfg
-
-#  Added this item but I need to continue
-# class Session:
-#     def __init__(self, venue_id, date, court_name, sessionName, start, end):
-#         self.sessionName = sessionName
-#         self.start = start
-#         self.end = end
-#         self.date = date
-#         self.court_name = court_name
-#         self.venue_id = venue_id
 
 class Sessions:
     def __init__(self, request, venues_cfg):
         self.venue_id = request.venue_id
         # what if there is no such id?
         self.venue_name = venues_cfg.get_venue_name(self.venue_id)
-        self._sessions = self.generate_sessions(request)
+        self._sessions = self._generate_sessions(request)
         
     
     def get_sessions(self):
@@ -60,6 +51,9 @@ class Sessions:
 
             for s in resource_sessions:
                 s["venue_id"] = self.venue_id
+                s[BOOKING_URL] = utils.generate_booking_url(self.venue_id, s["date"])
+                s["venue_name"] = self.venue_name
+            
                 sessions.append(s)
         return sessions
     
@@ -83,20 +77,19 @@ class Sessions:
         return res
     
     def is_session_free(self, session):
-        if session["sessionName"].isnumeric():
+        session_name = session["sessionName"]
+        if session_name.replace(".","",1).isnumeric():
             return True
         else:
             return False
 
-    def generate_sessions(self, request: Request):
+    def _generate_sessions(self, request: Request):
         res = []
         req_list = self._convert_json_to_sessions(request.content)
+        
         for session in req_list:
-            s = dict(session)
-            s["venue_name"] = self.venue_name
-            s[BOOKING_URL] = utils.generate_booking_url(self.venue_id, s["date"])
             if self.is_session_free(session):
-                res += self._split_session_by_hour(s)
+                res.append(session)
         return res
 
 

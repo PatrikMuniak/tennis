@@ -4,13 +4,13 @@ import time
 import requests
 from const import DB_PATH  
 from config import venues_cfg
-from models.request import Request, Requests, Database
-import logging
+from models.request import Request, Requests, DateTs
+from models.database import Database
 
+import logging
 
 logging.basicConfig(level=logging.INFO)
 scheduler = APScheduler()
-
 
 @scheduler.task('interval', id='retrieve_venue_sessions', seconds=60*14, misfire_grace_time=900) #60*14
 def retrieve_venue_sessions():
@@ -19,63 +19,24 @@ def retrieve_venue_sessions():
     end_date = (datetime.datetime.today()+datetime.timedelta(days=13))
 
     for venue_id in venues_cfg.venue_list.ids():
-        start = time.time()
+        
         url = venues_cfg.venue_list.generate_pull_url(venue_id, start_date, end_date)
         logging.info(f"Fetching sessions for {venue_id} url: {url}")
-        venue_sessions = requests.get(url).content
-        end = time.time()
+        r = requests.get(url)
 
-        req = Request()
-        req.save(venue_id, venue_sessions)
+        dt = DateTs()
+        dt.value = time.time()
+        req = Request(dt=dt, venue_id=venue_id, content=r.content)
 
+        db = Database(DB_PATH)
+        rs_obj = Requests(db)
+        rs_obj.insert(req)
 
-        
-        logging.info(f'Finished fetching data for {venue_id} start: {start_date} end: {end_date} time_request: {round(end-start, 2)} ')
+        logging.info(f'Finished fetching data for {venue_id} start: {start_date} end: {end_date} time_request: {r.elapsed.total_seconds()} ')
         time.sleep(10)
 
-@scheduler.task('interval', id='cleanup_old_requests_records', seconds=60*30, misfire_grace_time=900) #60*14
+@scheduler.task('interval', id='cleanup_old_requests_records', seconds=60*30, misfire_grace_time=900)
 def cleanup_venue_sessions():
     db = Database(DB_PATH)
     requests = Requests(db)
     requests.remove_records_older_than_a_week()
-    
-# if something is older than 7 days remove
-# req = Request()
-#         req.load_json(venue_sessions, venue_id)
-#         # passing an empty request doesn't make sense
-#         s = Sessions(req, venues_cfg)
-#         con = sqlite3.connect(DB_PATH)
-#         cur = con.cursor()
-
-#         for session in s.get_sessions():
-            
-#             request_date = int(time.time())
-#             court_name = session["court_name"]
-#             date = session["date"]
-#             sessionName = session["sessionName"] 
-            
-#             start = session["start"]
-#             end = session["end"]
-#             venue_name = session["venue_name"] 
-#             booking_url = session["booking_url"] 
-#             cur.execute('''INSERT INTO sessions 
-#                             (request_date,
-#                             court_name,
-#                             date, 
-#                             sessionName, 
-#                             start, 
-#                             end, 
-#                             venue_name, 
-#                             venue_id, 
-#                             booking_url) 
-#                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-#               (request_date,
-#                court_name,
-#                date,
-#                sessionName,
-#                start,
-#                end,
-#                venue_name,
-#                venue_id,
-#                booking_url))
-#         con.commit()

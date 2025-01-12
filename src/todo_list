@@ -1,4 +1,8 @@
-TO DO LIST
-- make http requests js async
-- don't need to request all the 14 days every time, sometimes the days don't have anything
- left so no point updating 
+let's say I add the possibility of adding multiple types to the DateTs value at that point:
+if it's an integer or float I'll use the unix conversion 
+if it's a string then convert it to just the string , but at this point I need to do a validation of the string
+# if isinstance(date_ts, numbers.Number):
+# elif isinstance(date_ts, str):
+#     # this way devs can bypass and put any value
+#     self._value = date_ts
+For both cases I should check and try to set the value and trigger an exception or waring if I get an invalid input 
