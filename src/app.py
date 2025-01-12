@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask
 
 from app_scheduler import scheduler
 from routes import pages
